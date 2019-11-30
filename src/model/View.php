@@ -2,7 +2,7 @@
 
 namespace BlogApp\src\model;
 
-use App\config\Request;
+use BlogApp\config\Request;
 
 class View
 {
