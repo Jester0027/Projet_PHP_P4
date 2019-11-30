@@ -1,0 +1,10 @@
+{
+    "name": "blog_app",
+    "description": "blog app for Jean Forteroche",
+    "autoload": {
+        "psr-4": {
+            "BlogApp\\src\\": "src/",
+            "BlogApp\\config\\": "config/"
+        }
+    }
+}
