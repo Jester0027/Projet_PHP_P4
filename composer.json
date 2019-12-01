@@ -1,5 +1,5 @@
 {
-    "name": "blog_app",
+    "name": "blog_app/blog_jf",
     "description": "blog app for Jean Forteroche",
     "autoload": {
         "psr-4": {
