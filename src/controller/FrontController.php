@@ -4,8 +4,15 @@ namespace BlogApp\src\controller;
 
 class FrontController extends Controller
 {
-    public function home()
+    public function getHome()
     {
-        $this->view->render('home');
+        return $this->view->render('home');
+    }
+
+    public function getArticle()
+    {
+        return $this->view->render('article', [
+
+        ]);
     }
 }
