@@ -18,17 +18,17 @@ class View
         $this->session = $this->request->getSession();
         $this->get = $this->request->getGet();
     }
-
+    
     public function render($template, $data = [])
     {
-        $this->file = './templates/' . $template . '.php';
-        $header = $this->renderFile('./templates/header.php', [
+        $this->file = '../templates/' . $template . '.php';
+        $header = $this->renderFile('../templates/header.php', [
             'get' => $this->get,
             'session' => $this->session
         ]);
         $content = $this->renderFile($this->file, $data);
-        $footer = $this->renderFile('./templates/footer.php', []);
-        $view = $this->renderFile('./templates/base.php', [
+        $footer = $this->renderFile('../templates/footer.php', []);
+        $view = $this->renderFile('../templates/base.php', [
             'title' => $this->title,
             'header' => $header,
             'content' => $content,
