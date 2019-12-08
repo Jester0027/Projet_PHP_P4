@@ -6,7 +6,7 @@ class Article
 {
     private $id;
     private $title;
-    private $userId;
+    private $author;
     private $content;
     private $createdAt;
 
@@ -17,7 +17,7 @@ class Article
 
     public function setId($id)
     {
-        $this->id = id;
+        $this->id = $id;
     }
 
     public function getTitle()
@@ -30,14 +30,15 @@ class Article
         $this->title = $title;
     }
 
-    public function getUserId()
+    public function getAuthor()
     {
-        return $this->userId;
+        return $this->author;
     }
 
-    public function setUserId($userId)
+    public function setAuthor($author)
     {
-        $this->userId = $userId;
+        $this->author = $author
+;
     }
 
     public function getContent()

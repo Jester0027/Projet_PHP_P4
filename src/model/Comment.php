@@ -5,7 +5,7 @@ namespace BlogApp\src\model;
 class Comment
 {
     private $id;
-    private $userId;
+    private $author;
     private $content;
     private $isReported;
     private $articleId;
@@ -21,14 +21,14 @@ class Comment
         $this->id = $id;
     }
 
-    public function getUserId()
+    public function getAuthor()
     {
-        return $this->userId;
+        return $this->author;
     }
 
-    public function setUserId($userId)
+    public function setAuthor($author)
     {
-        $this->userId = $userId;
+        $this->author = $author;
     }
 
     public function getContent()
