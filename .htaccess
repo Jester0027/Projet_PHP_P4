@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^/?$ public/index.php [L,NC]
+RewriteRule ^index.php$ public/index.php [L,NC]
