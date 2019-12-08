@@ -8,7 +8,7 @@ $route = $get->get('route');
             <a href="./" class="brand-logo center">Jean Forteroche</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li class="<?= !$route ? 'active' : '' ?>"><a href="./">Accueil</a></li>
-                <li class="<?= $route === 'article' ? 'active' : '' ?>"><a href="./?route=article">Article</a></li>
+                <li class="<?= $route === 'addArticle' ? 'active' : '' ?>"><a href="./?route=addArticle">Ajouter un article</a></li>
             </ul>
         </div>
     </nav>
