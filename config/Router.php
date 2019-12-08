@@ -25,10 +25,12 @@ class Router
     public function run()
     {
         $route = $this->request->getGet()->get('route');
-        try{
-            if(isset($route)){
-                if($route === 'article'){
-                    $this->frontController->getArticle();
+        try {
+            if (isset($route)) {
+                if ($route === 'article') {
+                    $this->frontController->getArticle($this->request->getGet()->get('articleId'));
+                } else if ($route === 'addArticle') {
+                    $this->backController->addArticle($this->request->getPost());
                 } else {
                     $this->errorController->get404();
                 }
