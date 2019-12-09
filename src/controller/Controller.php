@@ -18,6 +18,7 @@ abstract class Controller
     protected $get;
     protected $post;
     protected $session;
+    protected $reqMethod;
 
     public function __construct()
     {
@@ -29,5 +30,6 @@ abstract class Controller
         $this->get = $this->request->getGet();
         $this->post = $this->request->getPost();
         $this->session = $this->request->getSession();
+        $this->reqMethod = $_SERVER['REQUEST_METHOD'];
     }
 }
