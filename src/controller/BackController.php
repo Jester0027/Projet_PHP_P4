@@ -18,7 +18,16 @@ class BackController extends Controller
     {
         if($get->get('token') && $get->get('email')) {
             $this->userDAO->confirm($get);
+            $this->session->set('validation', 'Votre compte a bien été validé, vous pouvez vous connecter');
         }
+        header('Location: index.php');
+    }
+
+    public function logout()
+    {
+        $this->session->stop();
+        $this->session->start();
+        $this->session->set('logout', 'A bientot');
         header('Location: index.php');
     }
 }
