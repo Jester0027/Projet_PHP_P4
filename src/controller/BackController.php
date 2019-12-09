@@ -13,4 +13,12 @@ class BackController extends Controller
         }
         return $this->view->render('add_article');
     }
+
+    public function confirm(Parameter $get)
+    {
+        if($get->get('token') && $get->get('email')) {
+            $this->userDAO->confirm($get);
+        }
+        header('Location: index.php');
+    }
 }

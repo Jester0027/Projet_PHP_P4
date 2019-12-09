@@ -31,6 +31,12 @@ class Router
                     $this->frontController->getArticle($this->request->getGet()->get('articleId'));
                 } else if ($route === 'addArticle') {
                     $this->backController->addArticle($this->request->getPost());
+                } else if ($route === 'login') {
+                    $this->frontController->login($this->request->getPost());
+                } else if ($route === 'register') {
+                    $this->frontController->register($this->request->getPost());
+                } else if ($route === 'confirm') {
+                    $this->backController->confirm($this->request->getGet());
                 } else {
                     $this->errorController->get404();
                 }
