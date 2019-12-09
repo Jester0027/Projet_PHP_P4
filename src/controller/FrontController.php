@@ -3,6 +3,8 @@
 namespace BlogApp\src\controller;
 
 use BlogApp\config\Parameter;
+use BlogApp\src\mailer\Mail;
+use Exception;
 
 class FrontController extends Controller
 {
@@ -36,20 +38,29 @@ class FrontController extends Controller
     public function register(Parameter $post)
     {
         if ($this->reqMethod === 'POST') {
-            $username = $post->get('username');
-            $email = $post->get('email');
-            if ($post->get('password') !== $post->get('cPassword')) {
-                $this->session->set('pw_no_match', 'Les mots de passe ne sont pas identiques');
-                return $this->view->render('register', [
-                    'username' => $username,
-                    'email' => $email
-                ]);
+            $errors = $this->validation->validate($post, 'User');
+            if ($this->userDAO->checkUser($post)) {
+                $errors['username'] = $this->userDAO->checkUser($post);
             }
-            $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
-            $token = str_shuffle($token);
-            $this->userDAO->register($post, $token);
-            $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $token . "&email=" . $email;
-            return header('Location: index.php');
+            if ($this->userDAO->checkUserEmail($post)) {
+                $errors['email'] = $this->userDAO->checkUserEmail($post);
+            }
+            if ($post->get('password') !== $post->get('cPassword')) {
+                $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+            }
+            if (!$errors) {
+                $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
+                $token = str_shuffle($token);
+                $this->userDAO->register($post, $token);
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $token . "&email=" . $post->get('email');
+                $mail = new Mail();
+                $mail->sendConfirmation($post, $link);
+                return header('Location: index.php');
+            }
+            return $this->view->render('register', [
+                'post' => $post,
+                'errors' => $errors
+            ]);
         }
         return $this->view->render('register');
     }
