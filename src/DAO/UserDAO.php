@@ -39,7 +39,16 @@ class UserDAO extends DAO
 
     public function login(Parameter $post)
     {
-        
+        $sql = 'SELECT user.id, user.role_id, user.password, user.is_verified, role.name FROM user INNER JOIN role ON role.id = user.role_id WHERE username = ?';
+        $data = $this->createQuery($sql, [$post->get('username')]);
+        $result = $data->fetch();
+        $isPasswordValid = password_verify($post->get('password'), $result['password']);
+        $isVerified = $result['is_verified'];
+        return [
+            'result' => $result,
+            'isPasswordValid' => $isPasswordValid,
+            'isVerified' => $isVerified
+        ];
     }
 
     public function confirm(Parameter $get)
