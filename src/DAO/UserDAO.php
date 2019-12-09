@@ -6,9 +6,29 @@ use BlogApp\config\Parameter;
 
 class UserDAO extends DAO
 {
+    public function checkUser($post)
+    {
+        $sql = 'SELECT COUNT(username) FROM user WHERE username = ?';
+        $result = $this->createQuery($sql, [$post->get('username')]);
+        $isUsernameUnique = $result->fetchColumn();
+        if ($isUsernameUnique) {
+            return '<p class="red-text">Ce pseudo existe déjà</p>';
+        }
+    }
+
+    public function checkUserEmail($post)
+    {
+        $sql = 'SELECT COUNT(email) FROM user WHERE email = ?';
+        $result = $this->createQuery($sql, [$post->get('email')]);
+        $isEmailUnique = $result->fetchColumn();
+        if($isEmailUnique) {
+            return '<p class="red-text">Un compte avec cette addresse E-mail a déja été créé</p>';
+        }
+    }
+
     public function register(Parameter $post, $token)
     {
-        $sql = 'INSERT INTO User(username, password, role, status, email, token) VALUES(?, ?, 0, 0, ?, ?)';
+        $sql = 'INSERT INTO user(username, password, role, status, email, token) VALUES(?, ?, 0, 0, ?, ?)';
         $this->createQuery($sql, [
             $post->get('username'),
             password_hash($post->get('password'), PASSWORD_BCRYPT),
