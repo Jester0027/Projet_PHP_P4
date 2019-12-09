@@ -7,7 +7,7 @@ class User
     private $id;
     private $username;
     private $password;
-    private $role;
+    private $roleId;
     private $status;
     private $email;
     private $isVerified;
@@ -43,14 +43,14 @@ class User
         $this->password = $password;
     }
 
-    public function getRole()
+    public function getRoleId()
     {
         return $this->role;
     }
 
-    public function setRole($role)
+    public function setRoleId($roleId)
     {
-        $this->role = $role;
+        $this->roleId = $roleId;
     }
 
     public function getStatus()

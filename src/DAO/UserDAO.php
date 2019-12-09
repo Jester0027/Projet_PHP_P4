@@ -28,7 +28,7 @@ class UserDAO extends DAO
 
     public function register(Parameter $post, $token)
     {
-        $sql = 'INSERT INTO user(username, password, role, status, email, token) VALUES(?, ?, 0, 0, ?, ?)';
+        $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 0, ?, ?)';
         $this->createQuery($sql, [
             $post->get('username'),
             password_hash($post->get('password'), PASSWORD_BCRYPT),
