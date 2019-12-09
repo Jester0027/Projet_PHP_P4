@@ -6,5 +6,8 @@
             "BlogApp\\src\\": "src/",
             "BlogApp\\config\\": "config/"
         }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.1"
     }
 }
