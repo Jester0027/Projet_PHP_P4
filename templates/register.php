@@ -8,13 +8,15 @@
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
             <label for="username">Pseudo</label>
-            <input type="text" id="username" name="username" value="<?= isset($username) ? $username : '' ?>">
+            <input type="text" id="username" name="username" value="<?= isset($post) ? $post->get('username') : '' ?>">
+            <?= isset($errors['username']) ? $errors['username'] : '' ?>
         </div>
     </div>
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" value="<?= isset($email) ? $email : '' ?>">
+            <input type="email" id="email" name="email" value="<?= isset($post) ? $post->get('email') : '' ?>">
+            <?= isset($errors['email']) ? $errors['email'] : '' ?>
         </div>
     </div>
 
@@ -22,6 +24,7 @@
         <div class="input-field col m6 offset-m3 s12">
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password">
+            <?= isset($errors['password']) ? $errors['password'] : '' ?>
         </div>
     </div>
     <div class="row">
