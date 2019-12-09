@@ -4,7 +4,6 @@ namespace BlogApp\src\controller;
 
 use BlogApp\config\Parameter;
 use BlogApp\src\mailer\Mail;
-use Exception;
 
 class FrontController extends Controller
 {
@@ -29,8 +28,25 @@ class FrontController extends Controller
     public function login(Parameter $post)
     {
         if ($this->reqMethod === 'POST') {
-            $this->UserDAO->login();
-            return header('Location: index.php');
+            $result = $this->userDAO->login($post);
+            if($result && $result['isPasswordValid']) {
+                if (!$result['result']['is_verified']) {
+                    $this->session->set('error_login', 'Votre compte n\'est pas validé');
+                    return $this->view->render('login', [
+                        'post' => $post
+                    ]);
+                }
+                $this->session->set('login', 'content de vous revoir');
+                $this->session->set('id', $result['result']['id']);
+                $this->session->set('role', $result['result']['name']);
+                $this->session->set('username', $post->get('username'));
+                header('Location: index.php');
+            } else {
+                $this->session->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');
+                return $this->view->render('login', [
+                    'post' => $post
+                ]);
+            }
         }
         return $this->view->render('login');
     }
@@ -55,6 +71,7 @@ class FrontController extends Controller
                 $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $token . "&email=" . $post->get('email');
                 $mail = new Mail();
                 $mail->sendConfirmation($post, $link);
+                $this->session->set('register', 'Un email de confirmation vous a été envoyé');
                 return header('Location: index.php');
             }
             return $this->view->render('register', [
