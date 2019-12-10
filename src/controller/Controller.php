@@ -3,6 +3,7 @@
 namespace BlogApp\src\controller;
 
 use BlogApp\config\Request;
+use BlogApp\src\constraint\Validation;
 use BlogApp\src\model\View;
 use BlogApp\src\DAO\ArticleDAO;
 use BlogApp\src\DAO\CommentDAO;
@@ -18,6 +19,8 @@ abstract class Controller
     protected $get;
     protected $post;
     protected $session;
+    protected $validation;
+    protected $reqMethod;
 
     public function __construct()
     {
@@ -29,5 +32,7 @@ abstract class Controller
         $this->get = $this->request->getGet();
         $this->post = $this->request->getPost();
         $this->session = $this->request->getSession();
+        $this->validation = new Validation();
+        $this->reqMethod = $_SERVER['REQUEST_METHOD'];
     }
 }

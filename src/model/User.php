@@ -6,8 +6,12 @@ class User
 {
     private $id;
     private $username;
-    private $role;
+    private $password;
+    private $roleId;
     private $status;
+    private $email;
+    private $isVerified;
+    private $token;
 
     public function getId()
     {
@@ -24,14 +28,29 @@ class User
         return $this->username;
     }
 
-    public function getRole()
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getRoleId()
     {
         return $this->role;
     }
 
-    public function setRole($role)
+    public function setRoleId($roleId)
     {
-        $this->role = $role;
+        $this->roleId = $roleId;
     }
 
     public function getStatus()
@@ -42,5 +61,35 @@ class User
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    public function getIsVerified()
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified($isVerified)
+    {
+        $this->isVerified = $isVerified;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
     }
 }

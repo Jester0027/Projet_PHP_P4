@@ -4,7 +4,7 @@ namespace BlogApp\config;
 
 use Exception;
 use BlogApp\src\controller\FrontController;
-use BlogApp\src\controller\errorController;
+use BlogApp\src\controller\ErrorController;
 use BlogApp\src\controller\BackController;
 
 class Router
@@ -18,7 +18,7 @@ class Router
     {
         $this->request = new Request();
         $this->frontController = new FrontController();
-        $this->errorController = new errorController();
+        $this->errorController = new ErrorController();
         $this->backController = new BackController();
     }
 
@@ -31,6 +31,14 @@ class Router
                     $this->frontController->getArticle($this->request->getGet()->get('articleId'));
                 } else if ($route === 'addArticle') {
                     $this->backController->addArticle($this->request->getPost());
+                } else if ($route === 'login') {
+                    $this->frontController->login($this->request->getPost());
+                } else if ($route === 'register') {
+                    $this->frontController->register($this->request->getPost());
+                } else if ($route === 'logout') {
+                    $this->backController->logout();
+                } else if ($route === 'confirm') {
+                    $this->backController->confirm($this->request->getGet());
                 } else {
                     $this->errorController->get404();
                 }
