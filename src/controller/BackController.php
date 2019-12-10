@@ -6,12 +6,30 @@ use BlogApp\config\Parameter;
 
 class BackController extends Controller
 {
+    public function admin()
+    {
+        if($this->isAdmin()) {
+            $articles = $this->articleDAO->getArticles();
+            return $this->view->render('admin', [
+                'articles' => $articles
+            ]);
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+        }
+    }
+
     public function addArticle(Parameter $post)
     {
-        if($post->get('submit')) {
-            
+        if($this->isAdmin()) {
+            if($post->get('submit')) {
+                
+            }
+            return $this->view->render('add_article');
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
         }
-        return $this->view->render('add_article');
     }
 
     public function confirm(Parameter $get)
@@ -29,9 +47,11 @@ class BackController extends Controller
 
     public function logout()
     {
-        $this->session->stop();
-        $this->session->start();
-        $this->session->set('logout', 'A bientot');
+        if($this->isLoggedIn()) {
+            $this->session->stop();
+            $this->session->start();
+            $this->session->set('logout', 'A bientot');
+        }
         header('Location: index.php');
     }
 }

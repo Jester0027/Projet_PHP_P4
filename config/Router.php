@@ -39,6 +39,8 @@ class Router
                     $this->backController->logout();
                 } else if ($route === 'confirm') {
                     $this->backController->confirm($this->request->getGet());
+                } else if ($route === 'admin') {
+                    $this->backController->admin();
                 } else {
                     $this->errorController->get404();
                 }
