@@ -38,11 +38,11 @@ abstract class Controller
 
     protected function isLoggedIn()
     {
-        $this->session->get('username') ? true : false;
+        return $this->session->get('username') ? true : false;
     }
 
     protected function isAdmin()
     {
-        $this->session->get('role') === 'admin' ? true : false;
+        return $this->session->get('role') === 'admin' ? true : false;
     }
 }
