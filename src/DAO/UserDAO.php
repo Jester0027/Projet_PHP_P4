@@ -3,10 +3,33 @@
 namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
-use Exception;
+use BlogApp\src\model\User;
 
 class UserDAO extends DAO
 {
+    private function buildObject($row)
+    {
+        $user = new User();
+        $user->setId($row['id']);
+        $user->setUsername($row['username']);
+        $user->setRole($row['role']);
+        $user->setStatus($row['status']);
+        $user->setEmail($row['email']);
+        return $user;
+    }
+
+    public function getUsers()
+    {
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1';
+        $result = $this->createQuery($sql);
+        $users = [];
+        foreach ($result as $row) {
+            array_push($users, $this->buildObject($row));
+        }
+        $result->closeCursor();
+        return $users;
+    }
+
     public function checkUser($post)
     {
         $sql = 'SELECT COUNT(username) FROM user WHERE username = ?';
