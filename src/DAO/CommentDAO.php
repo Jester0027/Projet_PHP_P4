@@ -22,8 +22,7 @@ class CommentDAO extends DAO
         $result = $this->createQuery($sql, [$articleId]);
         $comments = [];
         foreach($result as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->buildObject($row);
+            array_push($comments, $this->buildObject($row));
         }
         $result->closeCursor();
         return $comments;

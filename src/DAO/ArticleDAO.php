@@ -2,6 +2,7 @@
 
 namespace BlogApp\src\DAO;
 
+use BlogApp\config\Parameter;
 use BlogApp\src\model\Article;
 
 class ArticleDAO extends DAO
@@ -23,8 +24,7 @@ class ArticleDAO extends DAO
         $result = $this->createQuery($sql);
         $articles = [];
         foreach ($result as $row) {
-            $articleId = $row['id'];
-            $articles[$articleId] = $this->buildObject($row);
+            array_push($articles, $this->buildObject($row));
         }
         $result->closeCursor();
         return $articles;
@@ -37,5 +37,10 @@ class ArticleDAO extends DAO
         $article = $result->fetch();
         $result->closeCursor();
         return $this->buildObject($article);
+    }
+
+    public function addArticle(Parameter $post)
+    {
+        
     }
 }
