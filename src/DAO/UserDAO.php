@@ -3,6 +3,7 @@
 namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
+use Exception;
 
 class UserDAO extends DAO
 {
@@ -21,7 +22,7 @@ class UserDAO extends DAO
         $sql = 'SELECT COUNT(email) FROM user WHERE email = ?';
         $result = $this->createQuery($sql, [$post->get('email')]);
         $isEmailUnique = $result->fetchColumn();
-        if($isEmailUnique) {
+        if ($isEmailUnique) {
             return '<p class="red-text">Un compte avec cette addresse E-mail a déja été créé</p>';
         }
     }
@@ -55,6 +56,18 @@ class UserDAO extends DAO
     {
         $token = $get->get('token');
         $email = $get->get('email');
+
+        $sql = 'SELECT username FROM user WHERE token = ? AND email = ?';
+        $userExists = $this->createQuery($sql, [
+            $token,
+            $email
+        ]);
+        $userExists = $userExists->fetch();
+
+        if(!$userExists) {
+            return false;
+        }
+
         $sql = 'UPDATE user SET is_verified = ?, token = ? WHERE token = ? AND email = ?';
         $this->createQuery($sql, [
             1,
@@ -62,5 +75,6 @@ class UserDAO extends DAO
             $token,
             $email
         ]);
+        return true;
     }
 }
