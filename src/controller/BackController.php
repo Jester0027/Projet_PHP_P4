@@ -17,8 +17,12 @@ class BackController extends Controller
     public function confirm(Parameter $get)
     {
         if($get->get('token') && $get->get('email')) {
-            $this->userDAO->confirm($get);
-            $this->session->set('validation', 'Votre compte a bien été validé, vous pouvez vous connecter');
+            $result = $this->userDAO->confirm($get);
+            if($result) {
+                $this->session->set('validation', 'Votre compte a bien été validé, vous pouvez vous connecter');
+            } else {
+                $this->session->set('validation', 'Erreur: l\'utilisateur n\'existe pas ou a déja été validé');
+            }
         }
         header('Location: index.php');
     }
