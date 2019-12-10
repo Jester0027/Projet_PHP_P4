@@ -5,6 +5,7 @@
     <?= $this->session->show('register') ?>
     <?= $this->session->show('validation') ?>
     <?= $this->session->show('logout') ?>
+    <?= $this->session->show('admin_access') ?>
 </p>
 
 <div class="row">
