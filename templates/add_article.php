@@ -9,5 +9,5 @@
         <label for="content">Contenu</label>
         <textarea class="tinymce" name="content" id="content"></textarea>
     </div>
-    <input type="submit" class="btn green" name="submit" id="submit" value="Ajouter">
+    <button type="submit" class="btn waves-effect waves-light green" name="submit" id="submit">Ajouter</button>
 </form>

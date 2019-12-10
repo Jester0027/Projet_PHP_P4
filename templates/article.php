@@ -15,7 +15,7 @@
     <form action="./?route=addComment&articleId=<?= $article->getId(); ?>">
         <label for="comment">Ajouter un commentaire</label>
         <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
-        <input type="submit" class="btn green" name="submit" value="Envoyer">
+        <input type="submit" class="btn waves-effect waves-light green" name="submit" value="Envoyer">
     </form>
     <h2>Commentaires</h2>
 
