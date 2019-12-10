@@ -10,8 +10,10 @@ class BackController extends Controller
     {
         if($this->isAdmin()) {
             $articles = $this->articleDAO->getArticles();
+            $users = $this->userDAO->getUsers();
             return $this->view->render('admin', [
-                'articles' => $articles
+                'articles' => $articles,
+                'users' => $users
             ]);
         } else {
             $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
@@ -22,8 +24,9 @@ class BackController extends Controller
     public function addArticle(Parameter $post)
     {
         if($this->isAdmin()) {
-            if($post->get('submit')) {
-                
+            if($this->reqMethod === 'POST') {
+                $this->articleDAO->addArticle($post);
+                return header('Location: index.php?route=admin');
             }
             return $this->view->render('add_article');
         } else {
