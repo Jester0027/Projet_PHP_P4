@@ -21,7 +21,7 @@ abstract class Mailer
     
             $mail->send();
         } catch(Exception $e) {
-            echo $e;
+            return $e;
         }
     }
 }

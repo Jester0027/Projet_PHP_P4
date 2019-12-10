@@ -24,6 +24,6 @@ class Mail extends Mailer
             <a href=\"" . $email . "\">Valider mon inscription</a>
         ";
 
-        $this->sendEmail($from, $to, $subject, $content, "Jean Forteroche");
+        return $this->sendEmail($from, $to, $subject, $content, "Jean Forteroche");
     }
 }
