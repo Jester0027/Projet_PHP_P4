@@ -34,7 +34,7 @@ class ArticleDAO extends DAO
 
     public function getArticle($articleId)
     {
-        $sql = 'SELECT article.id, article.title, article.content, user.username, article.created_at FROM article INNER JOIN user ON article.user_id = user.id WHERE article.id = ?';
+        $sql = 'SELECT article.id, article.title, article.content, user.username, article.caption, article.created_at FROM article INNER JOIN user ON article.user_id = user.id WHERE article.id = ?';
         $result = $this->createQuery($sql, [$articleId]);
         $article = $result->fetch();
         $result->closeCursor();
@@ -52,9 +52,15 @@ class ArticleDAO extends DAO
         ]);
     }
 
-    public function editArticle()
+    public function editArticle(Parameter $post, $articleId)
     {
-        
+        $sql = 'UPDATE article SET title = ?, content = ?, caption = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $post->get('title'),
+            $post->get('content'),
+            $post->get('caption'),
+            $articleId
+        ]);
     }
 
     public function deleteArticle($articleId)
