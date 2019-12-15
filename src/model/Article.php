@@ -8,6 +8,7 @@ class Article
     private $title;
     private $author;
     private $content;
+    private $caption;
     private $createdAt;
 
     public function getId()
@@ -49,6 +50,16 @@ class Article
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    public function getCaption()
+    {
+        return $this->caption;
+    }
+
+    public function setCaption($caption)
+    {
+        $this->caption = $caption;
     }
 
     public function getCreatedAt()

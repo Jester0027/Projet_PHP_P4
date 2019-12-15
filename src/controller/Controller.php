@@ -35,4 +35,14 @@ abstract class Controller
         $this->validation = new Validation();
         $this->reqMethod = $_SERVER['REQUEST_METHOD'];
     }
+
+    protected function isLoggedIn()
+    {
+        return $this->session->get('username') ? true : false;
+    }
+
+    protected function isAdmin()
+    {
+        return $this->session->get('role') === 'admin' ? true : false;
+    }
 }

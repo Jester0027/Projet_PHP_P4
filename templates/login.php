@@ -1,5 +1,6 @@
 <?php $this->title = 'Se connecter' ?>
 
+<p><?= $this->session->show('login') ?></p>
 <form method="POST" action="./index.php?route=login">
     <div class="row">
         <div class="col m6 offset-m3 s12">
@@ -22,7 +23,7 @@
 
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
-            <input class="btn green" type="submit" value="Se connecter" id="submit" name="submit">
+            <button class="btn waves-effect waves-light green" type="submit" id="submit" name="submit">Se connecter</button>
         </div>
     </div>
 </form>

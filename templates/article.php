@@ -1,9 +1,12 @@
-<?php $this->title = 'Article' ?>
+<?php $this->title = htmlspecialchars($article->getTitle()); ?>
 
 <div class="row">
     <h2><?= htmlspecialchars($article->getTitle()); ?></h2>
-    <div>
-        <?= $article->getContent(); ?>
+    <hr>
+    <div class="row">
+        <div class="col s12">
+            <?= $article->getContent(); ?>
+        </div>
     </div>
     <div class="row">
         <p>Par : <?= htmlspecialchars($article->getAuthor()); ?></p>
@@ -12,16 +15,22 @@
 </div>
 
 <div class="row">
-    <form action="./?route=addComment&articleId=<?= $article->getId(); ?>">
-        <label for="comment">Ajouter un commentaire</label>
-        <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
-        <input type="submit" class="btn green" name="submit" value="Envoyer">
+    <form method="POST" action="./index.php?route=addComment&articleId=<?= $article->getId(); ?>">
+        <div class="input-field col s12">
+            <label for="content">Ajouter un commentaire</label>
+            <textarea class="materialize-textarea" name="content" id="content"></textarea>
+        </div>
+        <div class="input-field col s12">
+            <button type="submit" class="btn waves-effect waves-light green" name="submit">Envoyer</button>
+        </div>
     </form>
     <h2>Commentaires</h2>
 
     <?php foreach($comments as $comment) : ?>
-        <h6><?= htmlspecialchars($comment->getAuthor()); ?></h6>
-        <p>le <?= htmlspecialchars($comment->getCreatedAt()); ?></p>
-        <p><?= htmlspecialchars($comment->getContent()); ?></p>
+        <div class="row">
+            <h6><?= htmlspecialchars($comment->getAuthor()); ?> le <?= htmlspecialchars($comment->getCreatedAt()); ?></h6>
+            <p><?= htmlspecialchars($comment->getContent()); ?></p>
+            <a class="red-text" href="index.php?route=reportComment&commentId=<?= $comment->getId() ?>">Signaler ce commentaire</a>
+        </div>
     <?php endforeach; ?>
 </div>
