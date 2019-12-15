@@ -30,7 +30,7 @@ class UserDAO extends DAO
         return $users;
     }
 
-    public function checkUser($post)
+    public function checkUser(Parameter $post)
     {
         $sql = 'SELECT COUNT(username) FROM user WHERE username = ?';
         $result = $this->createQuery($sql, [$post->get('username')]);
@@ -40,7 +40,7 @@ class UserDAO extends DAO
         }
     }
 
-    public function checkUserEmail($post)
+    public function checkUserEmail(Parameter $post)
     {
         $sql = 'SELECT COUNT(email) FROM user WHERE email = ?';
         $result = $this->createQuery($sql, [$post->get('email')]);
@@ -52,7 +52,7 @@ class UserDAO extends DAO
 
     public function register(Parameter $post, $token)
     {
-        $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 0, ?, ?)';
+        $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 1, ?, ?)';
         $this->createQuery($sql, [
             $post->get('username'),
             password_hash($post->get('password'), PASSWORD_BCRYPT),
@@ -63,15 +63,17 @@ class UserDAO extends DAO
 
     public function login(Parameter $post)
     {
-        $sql = 'SELECT user.id, user.role_id, user.password, user.is_verified, role.name FROM user INNER JOIN role ON role.id = user.role_id WHERE username = ?';
+        $sql = 'SELECT user.id, user.role_id, user.password, user.status, user.is_verified, role.name FROM user INNER JOIN role ON role.id = user.role_id WHERE username = ?';
         $data = $this->createQuery($sql, [$post->get('username')]);
         $result = $data->fetch();
         $isPasswordValid = password_verify($post->get('password'), $result['password']);
-        $isVerified = $result['is_verified'];
+        /**
+         * si is_verified && status -> token = NULL
+         * si !status -> return false
+         */
         return [
             'result' => $result,
-            'isPasswordValid' => $isPasswordValid,
-            'isVerified' => $isVerified
+            'isPasswordValid' => $isPasswordValid
         ];
     }
 
@@ -94,10 +96,35 @@ class UserDAO extends DAO
         $sql = 'UPDATE user SET is_verified = ?, token = ? WHERE token = ? AND email = ?';
         $this->createQuery($sql, [
             1,
-            '',
+            'NULL',
             $token,
             $email
         ]);
         return true;
+    }
+
+    public function deleteUser($userId)
+    {
+        $sql = 'DELETE FROM user WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+    }
+
+    public function banUser($userId)
+    {
+        $this->toggleBan($userId, 0);
+    }
+
+    public function unbanUser($userId)
+    {
+        $this->toggleBan($userId, 1);
+    }
+
+    public function toggleBan($userId, $status)
+    {
+        $sql = 'UPDATE user SET status = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $status,
+            $userId
+        ]);
     }
 }
