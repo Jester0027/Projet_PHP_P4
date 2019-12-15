@@ -3,6 +3,7 @@
 namespace BlogApp\src\controller;
 
 use BlogApp\config\Parameter;
+use BlogApp\config\Session;
 use BlogApp\src\mailer\Mail;
 
 class FrontController extends Controller
@@ -25,6 +26,22 @@ class FrontController extends Controller
         ]);
     }
 
+    public function addComment(Session $session, Parameter $post, $articleId)
+    {
+        if($this->isLoggedIn()) {
+            $this->commentDAO->addComment($session, $post, $articleId);
+            header('Location: index.php?route=article&articleId=' . $articleId);
+        } else {
+            $this->session->set('login', 'Vous devez vous connecter pour effectuer cette action');
+            header('Location: index.php?route=login');
+        }
+    }
+
+    public function reportComment()
+    {
+
+    }
+
     public function login(Parameter $post)
     {
         if(!$this->isLoggedIn()) {
@@ -37,13 +54,26 @@ class FrontController extends Controller
                             'post' => $post
                         ]);
                     }
-                    $this->session->set('login', 'content de vous revoir');
+                    if($result['result']['status'] === '0') {
+                        $this->session->set('error_login', 'Votre compte a été banni');
+                        return $this->view->render('login', [
+                            'post' => $post
+                        ]);
+                    }
+                    $this->session->set('login_message', 'content de vous revoir');
                     $this->session->set('id', $result['result']['id']);
                     $this->session->set('role', $result['result']['name']);
                     $this->session->set('username', $post->get('username'));
+                    /**
+                     * 
+                     * TODO
+                     * 
+                     * Si admin -> header admin
+                     * sinon -> header accueil (ou page de profil)
+                     */
                     header('Location: index.php');
                 } else {
-                    $this->session->set('error_login', 'Le pseudo ou le mot de passe sont incorrects');
+                    $this->session->set('error_login', 'Le pseudo ou le mot de passe est incorrect');
                     return $this->view->render('login', [
                         'post' => $post
                     ]);
