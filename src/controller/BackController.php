@@ -3,6 +3,7 @@
 namespace BlogApp\src\controller;
 
 use BlogApp\config\Parameter;
+use BlogApp\config\Session;
 
 class BackController extends Controller
 {
@@ -11,9 +12,11 @@ class BackController extends Controller
         if($this->isAdmin()) {
             $articles = $this->articleDAO->getArticles();
             $users = $this->userDAO->getUsers();
+            $reportedComments = $this->commentDAO->getReportedComments();
             return $this->view->render('admin', [
                 'articles' => $articles,
-                'users' => $users
+                'users' => $users,
+                'reportedComments' => $reportedComments
             ]);
         } else {
             $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
@@ -21,14 +24,39 @@ class BackController extends Controller
         }
     }
 
-    public function addArticle(Parameter $post)
+    public function addArticle(Parameter $post, Session $session)
     {
         if($this->isAdmin()) {
             if($this->reqMethod === 'POST') {
-                $this->articleDAO->addArticle($post);
+                $this->articleDAO->addArticle($post, $session);
+                $this->session->set('add_article', 'Votre article a bien été ajouté');
                 return header('Location: index.php?route=admin');
             }
             return $this->view->render('add_article');
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+        }
+    }
+
+    public function editArticle(Parameter $post, $articleId, $session)
+    {
+        if($this->isAdmin()) {
+            $article = $this->articleDAO->getArticle($articleId);
+            // if($article->getAuthor() != $session->get('username')) {
+            //     $this->session->set('article_access', 'Vous n\'etes pas l\'auteur de cet article');
+            //     return header('Location: index.php?route=admin');
+            // }
+            if($this->reqMethod === 'POST') {
+                $result = $this->articleDAO->editArticle($post, $articleId);
+                $this->session->set('add_article', 'Votre article a bien été modifié');
+                return header('Location: index.php?route=admin');
+            }
+            return $this->view->render('edit_article', [
+                'post' => $post,
+                'article' => $article,
+                'articleId' => $articleId
+            ]);
         } else {
             $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
             header('Location: index.php');
@@ -57,4 +85,51 @@ class BackController extends Controller
         }
         header('Location: index.php');
     }
+
+    public function deleteUser($userId)
+    {
+        if($this->isAdmin()) {
+            $this->userDAO->deleteUser($userId);
+            $this->session->set('user_action', 'L\'utilisateur a bien été supprimé');
+            return header('Location: index.php?route=admin');
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+        }
+    }
+
+    public function banUser($userId)
+    {
+        if($this->isAdmin()) {
+            $this->userDAO->banUser($userId);
+            $this->session->set('user_action', 'L\'utilisateur a bien été banni');
+            return header('Location: index.php?route=admin');
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+        }
+    }
+
+    public function unbanUser($userId)
+    {
+        if($this->isAdmin()) {
+            $this->userDAO->unbanUser($userId);
+            $this->session->set('user_action', 'L\'utilisateur a bien été débanni');
+            return header('Location: index.php?route=admin');
+        } else {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+        }
+    }
+
+    public function deleteComment()
+    {
+
+    }
+
+    public function pardonComment()
+    {
+
+    }
+
 }
