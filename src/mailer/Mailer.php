@@ -24,4 +24,22 @@ abstract class Mailer
             return $e;
         }
     }
+
+    protected function render($template, $data = [])
+    {
+        $this->file = '../templates/mails/' . $template . '.php';
+        $content = $this->renderFile($this->file, $data);
+        return $content;
+    }
+
+    private function renderFile($file, $data)
+    {
+        if (file_exists($file)) {
+            extract($data);
+            ob_start();
+            require $file;
+            return ob_get_clean();
+        }
+        header('Location: index.php?route=notFound');
+    }
 }
