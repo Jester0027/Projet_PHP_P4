@@ -50,9 +50,9 @@ class Router
                 } else if($route === 'unbanUser') {
                     $this->backController->unbanUser($this->request->getGet()->get('userId'));
                 } else if($route === 'editArticle') {
-                    $this->backController->editArticle($this->request->getGet()->get('articleId'), $this->request->getPost(), $this->request->getSession());
+                    $this->backController->editArticle($this->request->getPost(), $this->request->getGet()->get('articleId'), $this->request->getSession());
                 } else if($route === 'deleteComment') {
-                    $this->backController->deleteComment();   
+                    $this->backController->deleteComment();
                 } else if($route === 'reportComment') {
                     $this->frontController->reportComment();
                 } else if($route === 'pardonComment') {
