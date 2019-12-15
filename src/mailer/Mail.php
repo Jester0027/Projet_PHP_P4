@@ -2,13 +2,14 @@
 
 namespace BlogApp\src\mailer;
 
+use BlogApp\config\IMail;
 use BlogApp\config\Parameter;
 
-class Mail extends Mailer
+class Mail extends Mailer implements IMail
 {
     public function sendConfirmation(Parameter $post, $link)
     {
-        $from = "jean.forteroche@blog.com";
+        $from = self::ADDRESS;
         $to = $post->get('email');
         $subject = "Vérification d'authentification";
         $content = $this->render('confirm', [
@@ -16,6 +17,19 @@ class Mail extends Mailer
             'link' => $link
         ]);
 
-        return $this->sendEmail($from, $to, $subject, $content, "Jean Forteroche");
+        return $this->sendEmail($from, $to, $subject, $content, self::NAME);
+    }
+
+    public function sendPasswordRecovery(Parameter $post, $link)
+    {
+        $from = self::ADDRESS;
+        $to = $post->get('email');
+        $subject = "Récupération de mot de passe";
+        $content = $this->render('password_recovery', [
+            'post' => $post,
+            'link' => $link
+        ]);
+
+        return $this->sendEmail($from, $to, $subject, $content, self::NAME);
     }
 }
