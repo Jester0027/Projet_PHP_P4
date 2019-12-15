@@ -1,5 +1,6 @@
 <?php $this->title = 'Se connecter' ?>
 
+<p><?= $this->session->show('login') ?></p>
 <form method="POST" action="./index.php?route=login">
     <div class="row">
         <div class="col m6 offset-m3 s12">
