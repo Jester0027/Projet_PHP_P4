@@ -76,6 +76,33 @@ class BackController extends Controller
         header('Location: index.php');
     }
 
+    public function passwordRecovery(Parameter $get)
+    {
+        $isValid = $this->userDAO->checkTokenAndEmail($get->get('token'), $get->get('email'));
+        if($isValid) {
+            return $this->view->render('password_recovery', [
+                'token' => $get->get('token'),
+                'email' => $get->get('email')
+            ]);
+        } else {
+            return header('Location: index.php');
+        }
+    }
+
+    public function changePassword(Parameter $post)
+    {
+        if($this->reqMethod === 'POST') {
+            $isValid = $this->userDAO->checkTokenAndEmail($post->get('token'), $post->get('email'));
+            if($isValid) {
+                $user = $this->userDAO->getUserFromEmail($post->get('email'));
+                $this->userDAO->resetToken($user->getId());
+                $this->userDAO->changePassword($user->getId(), $post);
+                $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
+            }
+        }
+        header('Location: index.php');
+    }
+
     public function logout()
     {
         if($this->isLoggedIn()) {
