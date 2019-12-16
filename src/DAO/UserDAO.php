@@ -30,6 +30,19 @@ class UserDAO extends DAO
         return $users;
     }
 
+    public function getUserFromEmail($email)
+    {
+        $sql = 'SELECT COUNT(email) FROM user WHERE email = ? AND is_verified = 1';
+        $result = $this->createQuery($sql, [$email]);
+        $userExists = $result->fetchColumn();
+        if (!$userExists) return false;
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1 AND user.email = ?';
+        $result = $this->createQuery($sql, [$email]);
+        $user = $result->fetch();
+        $result->closeCursor();
+        return $this->buildObject($user);
+    }
+
     public function checkUser(Parameter $post)
     {
         $sql = 'SELECT COUNT(username) FROM user WHERE username = ?';
@@ -50,6 +63,12 @@ class UserDAO extends DAO
         }
     }
 
+    public function checkStatus($userId)
+    {
+        $sql = 'SELECT is_verified FROM user WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+    }
+
     public function register(Parameter $post, $token)
     {
         $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 1, ?, ?)';
@@ -59,6 +78,36 @@ class UserDAO extends DAO
             $post->get('email'),
             $token
         ]);
+    }
+
+    public function addToken($userId, $token)
+    {
+        $sql = 'UPDATE user SET token = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $token,
+            $userId
+        ]);
+    }
+
+    public function resetToken($userId)
+    {
+        $sql = 'UPDATE user SET token = NULL WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+    }
+
+    public function checkTokenAndEmail($token, $email)
+    {
+        $sql = 'SELECT COUNT(id) FROM user WHERE token = ? AND email = ?';
+        $result = $this->createQuery($sql, [
+            $token,
+            $email
+        ]);
+        $validTokenAndEmail = $result->fetchColumn();
+        if (!$validTokenAndEmail) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function login(Parameter $post)
@@ -89,7 +138,7 @@ class UserDAO extends DAO
         ]);
         $userExists = $userExists->fetch();
 
-        if(!$userExists) {
+        if (!$userExists) {
             return false;
         }
 
@@ -101,6 +150,15 @@ class UserDAO extends DAO
             $email
         ]);
         return true;
+    }
+
+    public function changePassword($id, Parameter $post)
+    {
+        $sql = 'UPDATE user SET password = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            password_hash($post->get('password'), PASSWORD_BCRYPT),
+            $id
+        ]);
     }
 
     public function deleteUser($userId)
