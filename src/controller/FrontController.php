@@ -64,6 +64,7 @@ class FrontController extends Controller
                     $this->session->set('id', $result['result']['id']);
                     $this->session->set('role', $result['result']['name']);
                     $this->session->set('username', $post->get('username'));
+                    $this->userDAO->resetToken($result['result']['id']);
                     /**
                      * 
                      * TODO
@@ -118,6 +119,30 @@ class FrontController extends Controller
             return $this->view->render('register');
         } else {
             header('Location: index.php');
+        }
+    }
+
+    public function lostPassword(Parameter $post)
+    {
+        if(!$this->isLoggedIn()) {
+            if($this->reqMethod === 'POST') {
+                $user = $this->userDAO->getUserFromEmail($post->get('email'));
+                if(!$user) {
+                    $this->session->set('password_recovery', 'Un email a été envoyé a l\'adresse indiquée');
+                    return header('Location: index.php');
+                };
+                $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
+                $token = str_shuffle($token);
+                $this->userDAO->addToken($user->getId(), $token);
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=passwordRecovery&token=" . $token . "&email=" . $post->get('email');
+                $mail = new Mail();
+                $mail->sendPasswordRecovery($post, $link);
+                $this->session->set('password_recovery', 'Un email a été envoyé a l\'adresse indiquée');
+                return header('Location: index.php');
+            }
+            return $this->view->render('lost_password');
+        } else {
+            return header('Location: index.php');
         }
     }
 }
