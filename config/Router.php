@@ -57,6 +57,12 @@ class Router
                     $this->frontController->reportComment();
                 } else if($route === 'pardonComment') {
                     $this->backController->pardonComment();
+                } else if($route === 'lostPassword') {
+                    $this->frontController->lostPassword($this->request->getPost());
+                } else if($route === 'passwordRecovery') {
+                    $this->backController->passwordRecovery($this->request->getGet());
+                } else if($route === 'changePassword') {
+                    $this->backController->changePassword($this->request->getPost());
                 } else {
                     $this->errorController->get404();
                 }
