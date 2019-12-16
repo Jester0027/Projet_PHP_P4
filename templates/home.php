@@ -6,6 +6,7 @@
     <?= $this->session->show('validation') ?>
     <?= $this->session->show('logout') ?>
     <?= $this->session->show('admin_access') ?>
+    <?= $this->session->show('password_recovery') ?>
 </p>
 
 <div class="row">
