@@ -84,9 +84,8 @@ class BackController extends Controller
                 'token' => $get->get('token'),
                 'email' => $get->get('email')
             ]);
-        } else {
-            return header('Location: index.php');
         }
+        return header('Location: index.php');
     }
 
     public function changePassword(Parameter $post)
@@ -101,6 +100,19 @@ class BackController extends Controller
             }
         }
         header('Location: index.php');
+    }
+
+    public function profile(Session $session)
+    {
+        if($this->isLoggedIn()) {
+            return $this->view->render('profile', [
+                'session' => $session
+            ], [
+                'profil'
+            ]);
+        } else {
+            header('Location: index.php');
+        }
     }
 
     public function logout()
