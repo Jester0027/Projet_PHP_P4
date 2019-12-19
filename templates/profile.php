@@ -2,20 +2,24 @@
 
 <h1>Profil de <?= $session->get('username') ?></h1>
 
+<p>
+    <?= $this->session->show('email_profile_change'); ?>
+</p>
+
 <ul class="collapsible expandable">
     <li>
         <div class="collapsible-header"><i class="material-icons">email</i>E-mail</div>
         <div class="collapsible-body">
             <h5>Changer l'adresse E-mail</h5>
-            <form action="index.php?route=changeEmail">
+            <form method="POST" action="index.php?route=changeEmail">
                 <div class="row">
                     <div class="input-field col s12">
-                        <label for="emailPassword">Mot de passe</label>
-                        <input type="password" id="emailPassword" name="emailPassword">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password">
                     </div>
                     <div class="input-field col s12">
-                        <label for="emailMail">Adresse E-mail actuelle</label>
-                        <input type="email" id="emailMail" name="emailMail">
+                        <label for="email">Adresse E-mail actuelle</label>
+                        <input type="email" id="email" name="email">
                     </div>
                     <div class="input-field col s12">
                         <label for="newEmail">Nouvelle adresse E-mail</label>
@@ -32,15 +36,15 @@
         <div class="collapsible-header"><i class="material-icons">security</i>Mot de passe</div>
         <div class="collapsible-body">
             <h5>Changer le mot de passe</h5>
-            <form action="index.php?route=changePassword">
+            <form method="POST"action="index.php?route=changePassword">
                 <div class="row">
                     <div class="input-field col s12">
-                        <label for="pwPassword">Mot de passe</label>
-                        <input type="password" id="pwPassword" name="pwPassword">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password">
                     </div>
                     <div class="input-field col s12">
-                        <label for="pwEmail">Adresse E-mail</label>
-                        <input type="email" id="pwEmail" name="pwEmail">
+                        <label for="email">Adresse E-mail</label>
+                        <input type="email" id="email" name="email">
                     </div>
                     <div class="input-field col s12">
                         <label for="newPassword">Nouveau mot de passe</label>
