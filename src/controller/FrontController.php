@@ -5,6 +5,8 @@ namespace BlogApp\src\controller;
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\mailer\Mail;
+use DateTime;
+use DateTimeZone;
 
 class FrontController extends Controller
 {
@@ -42,6 +44,11 @@ class FrontController extends Controller
 
     }
 
+    public function profile()
+    {
+
+    }
+
     public function login(Parameter $post)
     {
         if(!$this->isLoggedIn()) {
@@ -65,13 +72,10 @@ class FrontController extends Controller
                     $this->session->set('role', $result['result']['name']);
                     $this->session->set('username', $post->get('username'));
                     $this->userDAO->resetToken($result['result']['id']);
-                    /**
-                     * 
-                     * TODO
-                     * 
-                     * Si admin -> header admin
-                     * sinon -> header accueil (ou page de profil)
-                     */
+                    
+                    if($result['result']['name'] === 'admin') {
+                        return header('location: index.php?route=admin');
+                    }
                     header('Location: index.php');
                 } else {
                     $this->session->set('error_login', 'Le pseudo ou le mot de passe est incorrect');
@@ -104,7 +108,9 @@ class FrontController extends Controller
                 if (!$errors) {
                     $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
                     $token = str_shuffle($token);
-                    $this->userDAO->register($post, $token);
+                    $createdAt = new DateTime();
+                    $createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
+                    $this->userDAO->register($post, $token, $createdAt->format('Y-m-d H:i:s'));
                     $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $token . "&email=" . $post->get('email');
                     $mail = new Mail();
                     $mail->sendConfirmation($post, $link);
