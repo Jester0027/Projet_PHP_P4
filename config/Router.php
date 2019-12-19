@@ -67,6 +67,8 @@ class Router
                     $this->backController->changeEmail($this->request->getPost(), $this->request->getSession(), $this->request->getGet());
                 } else if ($route === 'changePassword') {
                     $this->backController->changePassword($this->request->getPost(), $this->request->getSession());
+                } else if ($route === 'deleteAccount') {
+                    $this->backController->deleteAccount($this->request->getPost(), $this->request->getSession());
                 } else {
                     $this->errorController->get404();
                 }
