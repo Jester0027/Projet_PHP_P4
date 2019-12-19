@@ -26,5 +26,9 @@
         <?= $content ?>
     </main>
     <?= $footer ?>
+
+    <?php foreach($scriptFiles as $file) { ?>
+        <script type="text/javascript" src="public/js/<?= $file ?>.js"></script>
+    <?php } ?>
 </body>
 </html>

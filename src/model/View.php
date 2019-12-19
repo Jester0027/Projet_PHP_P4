@@ -19,7 +19,7 @@ class View
         $this->get = $this->request->getGet();
     }
     
-    public function render($template, $data = [])
+    public function render($template, $data = [], $scriptFiles = [])
     {
         $this->file = '../templates/' . $template . '.php';
         $header = $this->renderFile('../templates/header.php', [
@@ -33,7 +33,8 @@ class View
             'header' => $header,
             'content' => $content,
             'footer' => $footer,
-            'session' => $this->session
+            'session' => $this->session,
+            'scriptFiles' => $scriptFiles
         ]);
         echo $view;
     }

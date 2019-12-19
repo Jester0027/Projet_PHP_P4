@@ -2,10 +2,11 @@
 
 namespace BlogApp\src\DAO;
 
+use BlogApp\config\DBConfig;
 use PDO;
 use Exception;
 
-abstract class DAO
+abstract class DAO implements DBConfig
 {
     private $connection;
 
@@ -20,7 +21,7 @@ abstract class DAO
     private function getConnection()
     {
         try {
-            $this->connection = new PDO(DB_HOST, DB_USER, DB_PW);
+            $this->connection = new PDO(self::DB_HOST, self::DB_USER, self::DB_PW);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             return $this->connection;

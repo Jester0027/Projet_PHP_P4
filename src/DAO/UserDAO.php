@@ -30,6 +30,32 @@ class UserDAO extends DAO
         return $users;
     }
 
+    public function getUser($userId)
+    {
+        $sql = 'SELECT COUNT(id) FROM user WHERE id = ? AND is_verified = 1';
+        $result = $this->createQuery($sql, [$userId]);
+        $userExists = $result->fetchColumn();
+        if (!$userExists) return false;
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1 AND user.id = ?';
+        $result = $this->createQuery($sql, [$userId]);
+        $user = $result->fetch();
+        $result->closeCursor();
+        return $this->buildObject($user);
+    }
+
+    public function getUserFromEmail($email)
+    {
+        $sql = 'SELECT COUNT(email) FROM user WHERE email = ? AND is_verified = 1';
+        $result = $this->createQuery($sql, [$email]);
+        $userExists = $result->fetchColumn();
+        if (!$userExists) return false;
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1 AND user.email = ?';
+        $result = $this->createQuery($sql, [$email]);
+        $user = $result->fetch();
+        $result->closeCursor();
+        return $this->buildObject($user);
+    }
+
     public function checkUser(Parameter $post)
     {
         $sql = 'SELECT COUNT(username) FROM user WHERE username = ?';
@@ -38,6 +64,15 @@ class UserDAO extends DAO
         if ($isUsernameUnique) {
             return '<p class="red-text">Ce pseudo existe déjà</p>';
         }
+    }
+
+    public function checkPassword($id, $password)
+    {
+        $sql = 'SELECT password FROM user WHERE id = ?';
+        $data = $this->createQuery($sql, [$id]);
+        $result = $data->fetch();
+        $isPasswordValid = password_verify($password, $result['password']);
+        return $isPasswordValid;
     }
 
     public function checkUserEmail(Parameter $post)
@@ -50,15 +85,53 @@ class UserDAO extends DAO
         }
     }
 
-    public function register(Parameter $post, $token)
+    public function checkStatus($userId)
     {
-        $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 1, ?, ?)';
+        $sql = 'SELECT is_verified FROM user WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+    }
+
+    public function register(Parameter $post, $token, $createdAt)
+    {
+        $sql = 'INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(?, ?, 1, 1, ?, ?, ?)';
+        // INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(:username,...)
         $this->createQuery($sql, [
             $post->get('username'),
             password_hash($post->get('password'), PASSWORD_BCRYPT),
             $post->get('email'),
-            $token
+            $token,
+            $createdAt
         ]);
+    }
+
+    public function addToken($userId, $token)
+    {
+        $sql = 'UPDATE user SET token = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $token,
+            $userId
+        ]);
+    }
+
+    public function resetToken($userId)
+    {
+        $sql = 'UPDATE user SET token = NULL WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+    }
+
+    public function checkTokenAndEmail($token, $email)
+    {
+        $sql = 'SELECT COUNT(id) FROM user WHERE token = ? AND email = ?';
+        $result = $this->createQuery($sql, [
+            $token,
+            $email
+        ]);
+        $validTokenAndEmail = $result->fetchColumn();
+        if (!$validTokenAndEmail) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function login(Parameter $post)
@@ -67,10 +140,6 @@ class UserDAO extends DAO
         $data = $this->createQuery($sql, [$post->get('username')]);
         $result = $data->fetch();
         $isPasswordValid = password_verify($post->get('password'), $result['password']);
-        /**
-         * si is_verified && status -> token = NULL
-         * si !status -> return false
-         */
         return [
             'result' => $result,
             'isPasswordValid' => $isPasswordValid
@@ -89,7 +158,7 @@ class UserDAO extends DAO
         ]);
         $userExists = $userExists->fetch();
 
-        if(!$userExists) {
+        if (!$userExists) {
             return false;
         }
 
@@ -103,9 +172,29 @@ class UserDAO extends DAO
         return true;
     }
 
+    public function changePassword($id, $password)
+    {
+        $sql = 'UPDATE user SET password = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            password_hash($password, PASSWORD_BCRYPT),
+            $id
+        ]);
+    }
+
+    public function changeEmail($id, $email)
+    {
+        $sql = 'UPDATE user SET email = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $email,
+            $id
+        ]);
+    }
+
     public function deleteUser($userId)
     {
         $sql = 'DELETE FROM user WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+        $sql = 'DELETE FROM comment WHERE user_id = ?';
         $this->createQuery($sql, [$userId]);
     }
 

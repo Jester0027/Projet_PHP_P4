@@ -9,6 +9,7 @@ $route = $get->get('route');
                 <?php if ($session->get('username')) {
                     ?>
                     <li class="<?= $route === 'logout' ? 'active' : '' ?>"><a href="./index.php?route=logout">Se déconnecter</a></li>
+                    <li class="<?= $route === 'profile' ? 'active' : '' ?>"><a href="./index.php?route=profile">Profil</a></li>
                 <?php
                 } else {
                     ?>

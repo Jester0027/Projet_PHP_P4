@@ -23,7 +23,12 @@
 
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
-            <button class="btn waves-effect waves-light green" type="submit" id="submit" name="submit">Se connecter</button>
+            <div class="left">
+                <button class="btn waves-effect waves-light green" type="submit" id="submit" name="submit">Se connecter</button>
+            </div>
+            <div class="right">
+                <a class="red-text" href="index.php?route=lostPassword">mot de passe oublié ?</a>
+            </div>
         </div>
     </div>
 </form>
