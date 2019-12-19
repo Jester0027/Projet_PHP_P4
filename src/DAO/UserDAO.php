@@ -69,14 +69,16 @@ class UserDAO extends DAO
         $this->createQuery($sql, [$userId]);
     }
 
-    public function register(Parameter $post, $token)
+    public function register(Parameter $post, $token, $createdAt)
     {
-        $sql = 'INSERT INTO user(username, password, role_id, status, email, token) VALUES(?, ?, 1, 1, ?, ?)';
+        $sql = 'INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(?, ?, 1, 1, ?, ?, ?)';
+        // INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(:username,...)
         $this->createQuery($sql, [
             $post->get('username'),
             password_hash($post->get('password'), PASSWORD_BCRYPT),
             $post->get('email'),
-            $token
+            $token,
+            $createdAt
         ]);
     }
 
@@ -116,10 +118,6 @@ class UserDAO extends DAO
         $data = $this->createQuery($sql, [$post->get('username')]);
         $result = $data->fetch();
         $isPasswordValid = password_verify($post->get('password'), $result['password']);
-        /**
-         * si is_verified && status -> token = NULL
-         * si !status -> return false
-         */
         return [
             'result' => $result,
             'isPasswordValid' => $isPasswordValid
@@ -164,6 +162,8 @@ class UserDAO extends DAO
     public function deleteUser($userId)
     {
         $sql = 'DELETE FROM user WHERE id = ?';
+        $this->createQuery($sql, [$userId]);
+        $sql = 'DELETE FROM comment WHERE user_id = ?';
         $this->createQuery($sql, [$userId]);
     }
 
