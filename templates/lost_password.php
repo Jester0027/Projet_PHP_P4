@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col m6 offset-m3 s12">
-        <h5>Récupération du mot de passe</h5>
+        <h5>Mot de passe oublié</h5>
     </div>
 </div>
 <form method="POST" action="index.php?route=lostPassword">
