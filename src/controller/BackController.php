@@ -182,8 +182,36 @@ class BackController extends Controller
                 }
                 $this->userDAO->changePassword($user->getId(), $newPassword);
                 $this->session->set('profile_change', 'Le mot de passe a bien été changé');
-                return header('Location: index.php?route=profile');
             }
+            return header('Location: index.php?route=profile');
+        } else {
+            $this->session->set('profile_change', 'Vous devez vous connecter pour effectuer cette action');
+            header('Location: index.php');
+        }
+    }
+
+    public function deleteAccount(Parameter $post, Session $session)
+    {
+        if($this->isLoggedIn()) {
+            $user = $this->userDAO->getUser($session->get('id'));
+            if($this->reqMethod === 'POST') {
+                $email = $post->get('email');
+                $password = $post->get('password');
+                $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
+                if ($user->getEmail() !== $email) {
+                    $this->session->set('profile_change', 'Erreur: l\'email n\'est pas correct');
+                    return header('Location: index.php');
+                }
+                if (!$isPasswordValid) {
+                    $this->session->set('profile_change', 'Erreur: le mot de passe n\'est pas correct');
+                    return header('Location: index.php');
+                }
+                $this->userDAO->deleteUser($user->getId());
+                $session->stop();
+                $session->start();
+                $this->session->set('profile_change', 'Votre compte a bien été supprimé');
+            }
+            return header('Location: index.php');
         } else {
             $this->session->set('profile_change', 'Vous devez vous connecter pour effectuer cette action');
             header('Location: index.php');
