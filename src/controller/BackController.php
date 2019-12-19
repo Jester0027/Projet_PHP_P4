@@ -84,7 +84,7 @@ class BackController extends Controller
             if ($this->reqMethod === 'POST') {
                 $user = $this->userDAO->getUserFromEmail($post->get('email'));
                 $this->userDAO->resetToken($user->getId());
-                $this->userDAO->changePassword($user->getId(), $post);
+                $this->userDAO->changePassword($user->getId(), $post->get('password'));
                 $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
                 return header('Location: index.php');
             }
@@ -118,9 +118,10 @@ class BackController extends Controller
                 $password = $post->get('password');
                 $newEmail = $post->get('newEmail');
                 $userAtNewEmail = $this->userDAO->getUserFromEmail($newEmail);
+                $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
                 if (
                     $user->getEmail() !== $currentEmail ||
-                    password_verify($password, $user->getPassword()) ||
+                    !$isPasswordValid ||
                     $userAtNewEmail
                 ) {
                     $this->session->set('login_message', 'Erreur');
@@ -133,7 +134,7 @@ class BackController extends Controller
                 $mail = new Mail();
                 $mail->sendEmailChange($post, $link, $user);
                 $this->userDAO->addToken($session->get('id'), $token);
-                $this->session->set('email_profile_change', 'Un email de confirmation vous a été envoyé');
+                $this->session->set('profile_change', 'Un email de confirmation vous a été envoyé');
                 return header('Location: index.php?route=profile');
             } else {
                 $token = $get->get('token');
@@ -142,17 +143,49 @@ class BackController extends Controller
 
                 $userValid = $this->userDAO->checkTokenAndEmail($token, $currentEmail);
                 if (!$userValid) {
-                    $this->session->set('email_profile_change', 'Erreur');
+                    $this->session->set('profile_change', 'Erreur');
                     return header('Location: index.php');
                 }
 
                 $this->userDAO->changeEmail($user->getId(), $newEmail);
                 $this->userDAO->resetToken($user->getId());
-                $this->session->set('email_profile_change', 'Votre adresse Email a été changée');
+                $this->session->set('profile_change', 'Votre adresse Email a été changée');
                 return header('Location: index.php?route=profile');
             }
         } else {
-            $this->session->set('email_profile_change', 'Vous devez vous connecter pour effectuer cette action');
+            $this->session->set('profile_change', 'Vous devez vous connecter pour effectuer cette action');
+            header('Location: index.php');
+        }
+    }
+
+    public function changePassword(Parameter $post, Session $session)
+    {
+        if ($this->isLoggedIn()) {
+            $user = $this->userDAO->getUser($session->get('id'));
+            if ($this->reqMethod === 'POST') {
+                $email = $post->get('email');
+                $password = $post->get('password');
+                $newPassword = $post->get('newPassword');
+                $cNewPassword = $post->get('cNewPassword');
+                $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
+                if ($user->getEmail() !== $email) {
+                    $this->session->set('profile_change', 'Erreur: l\'email n\'est pas correct');
+                    return header('Location: index.php');
+                }
+                if (!$isPasswordValid) {
+                    $this->session->set('profile_change', 'Erreur: le mot de passe n\'est pas correct');
+                    return header('Location: index.php');
+                }
+                if ($newPassword !== $cNewPassword) {
+                    $this->session->set('profile_change', 'Erreur: les mots de passe ne correspondent pas');
+                    return header('Location: index.php');
+                }
+                $this->userDAO->changePassword($user->getId(), $newPassword);
+                $this->session->set('profile_change', 'Le mot de passe a bien été changé');
+                return header('Location: index.php?route=profile');
+            }
+        } else {
+            $this->session->set('profile_change', 'Vous devez vous connecter pour effectuer cette action');
             header('Location: index.php');
         }
     }
