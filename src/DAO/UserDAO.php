@@ -30,6 +30,19 @@ class UserDAO extends DAO
         return $users;
     }
 
+    public function getUser($userId)
+    {
+        $sql = 'SELECT COUNT(id) FROM user WHERE id = ? AND is_verified = 1';
+        $result = $this->createQuery($sql, [$userId]);
+        $userExists = $result->fetchColumn();
+        if (!$userExists) return false;
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1 AND user.id = ?';
+        $result = $this->createQuery($sql, [$userId]);
+        $user = $result->fetch();
+        $result->closeCursor();
+        return $this->buildObject($user);
+    }
+
     public function getUserFromEmail($email)
     {
         $sql = 'SELECT COUNT(email) FROM user WHERE email = ? AND is_verified = 1';
@@ -155,6 +168,15 @@ class UserDAO extends DAO
         $sql = 'UPDATE user SET password = ? WHERE id = ?';
         $this->createQuery($sql, [
             password_hash($post->get('password'), PASSWORD_BCRYPT),
+            $id
+        ]);
+    }
+
+    public function changeEmail($id, $email)
+    {
+        $sql = 'UPDATE user SET email = ? WHERE id = ?';
+        $this->createQuery($sql, [
+            $email,
             $id
         ]);
     }
