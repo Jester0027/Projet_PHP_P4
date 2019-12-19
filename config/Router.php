@@ -60,9 +60,7 @@ class Router
                 } else if($route === 'lostPassword') {
                     $this->frontController->lostPassword($this->request->getPost());
                 } else if($route === 'passwordRecovery') {
-                    $this->backController->passwordRecovery($this->request->getGet());
-                } else if($route === 'changePassword') {
-                    $this->backController->changePassword($this->request->getPost());
+                    $this->backController->passwordRecovery($this->request->getPost(), $this->request->getGet());
                 } else if($route === 'profile') {
                     $this->backController->profile($this->request->getSession());
                 } else {

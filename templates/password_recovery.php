@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<form method="POST" action="index.php?route=changePassword">
+<form method="POST" action="index.php?route=passwordRecovery&token=<?= $token ?>&email=<?= $email ?>">
 
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
