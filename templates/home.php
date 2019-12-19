@@ -8,6 +8,7 @@
     <?= $this->session->show('admin_access') ?>
     <?= $this->session->show('password_recovery') ?>
     <?= $this->session->show('pw_change') ?>
+    <?= $this->session->show('email_profile_change') ?>
 </p>
 
 <div class="row">
