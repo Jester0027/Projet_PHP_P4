@@ -66,6 +66,15 @@ class UserDAO extends DAO
         }
     }
 
+    public function checkPassword($id, $password)
+    {
+        $sql = 'SELECT password FROM user WHERE id = ?';
+        $data = $this->createQuery($sql, [$id]);
+        $result = $data->fetch();
+        $isPasswordValid = password_verify($password, $result['password']);
+        return $isPasswordValid;
+    }
+
     public function checkUserEmail(Parameter $post)
     {
         $sql = 'SELECT COUNT(email) FROM user WHERE email = ?';
@@ -163,11 +172,11 @@ class UserDAO extends DAO
         return true;
     }
 
-    public function changePassword($id, Parameter $post)
+    public function changePassword($id, $password)
     {
         $sql = 'UPDATE user SET password = ? WHERE id = ?';
         $this->createQuery($sql, [
-            password_hash($post->get('password'), PASSWORD_BCRYPT),
+            password_hash($password, PASSWORD_BCRYPT),
             $id
         ]);
     }
