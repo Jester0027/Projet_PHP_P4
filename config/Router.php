@@ -63,6 +63,8 @@ class Router
                     $this->backController->passwordRecovery($this->request->getGet());
                 } else if($route === 'changePassword') {
                     $this->backController->changePassword($this->request->getPost());
+                } else if($route === 'profile') {
+                    $this->backController->profile($this->request->getSession());
                 } else {
                     $this->errorController->get404();
                 }
