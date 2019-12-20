@@ -19,7 +19,7 @@ class View
         $this->get = $this->request->getGet();
     }
     
-    public function render($template, $data = [], $scriptFiles = [])
+    public function render($template, $data = [], $scriptFiles = [], $cdn = [])
     {
         $this->file = '../templates/' . $template . '.php';
         $header = $this->renderFile('../templates/header.php', [
@@ -34,9 +34,17 @@ class View
             'content' => $content,
             'footer' => $footer,
             'session' => $this->session,
-            'scriptFiles' => $scriptFiles
+            'scriptFiles' => $scriptFiles,
+            'cdn' => $cdn
         ]);
         echo $view;
+    }
+
+    public function renderTemplate($template, $data = [])
+    {
+        $file = '../templates/templates/' . $template . '.php';
+        $content = $this->renderFile($file, $data);
+        echo $content;
     }
 
     private function renderFile($file, $data)
@@ -47,6 +55,8 @@ class View
             require $file;
             return ob_get_clean();
         }
+        var_dump($file);
+        return;
         header('Location: index.php?route=notFound');
     }
 }
