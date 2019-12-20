@@ -7,11 +7,17 @@
 </div>
 
 <form method="POST" action="index.php?route=passwordRecovery&token=<?= $token ?>&email=<?= $email ?>">
-
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password">
+            <?= isset($error) ? $error : '' ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col m6 offset-m3 s12">
+            <label for="cPassword">Mot de passe</label>
+            <input type="password" id="cPassword" name="cPassword">
         </div>
     </div>
     

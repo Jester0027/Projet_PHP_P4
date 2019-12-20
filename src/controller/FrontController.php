@@ -31,8 +31,19 @@ class FrontController extends Controller
     public function addComment(Session $session, Parameter $post, $articleId)
     {
         if($this->isLoggedIn()) {
-            $this->commentDAO->addComment($session, $post, $articleId);
-            header('Location: index.php?route=article&articleId=' . $articleId);
+            $errors = $this->validation->validate($post, 'Comment');
+            if(!$errors) {
+                $this->commentDAO->addComment($session, $post, $articleId);
+                return header('Location: index.php?route=article&articleId=' . $articleId);
+            }
+            $article = $this->articleDAO->getArticle($articleId);
+            $comments = $this->commentDAO->getCommentsFromArticleId($articleId);
+            return $this->view->render('article', [
+                'post' => $post,
+                'errors' => $errors,
+                'article' => $article,
+                'comments' => $comments
+            ]);
         } else {
             $this->session->set('login', 'Vous devez vous connecter pour effectuer cette action');
             header('Location: index.php?route=login');

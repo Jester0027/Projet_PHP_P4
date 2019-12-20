@@ -29,9 +29,16 @@ class BackController extends Controller
     {
         if ($this->isAdmin()) {
             if ($this->reqMethod === 'POST') {
-                $this->articleDAO->addArticle($post, $session);
-                $this->session->set('add_article', 'Votre article a bien été ajouté');
-                return header('Location: index.php?route=admin');
+                $errors = $this->validation->validate($post, 'Article');
+                if(!$errors) {
+                    $this->articleDAO->addArticle($post, $session);
+                    $this->session->set('add_article', 'Votre article a bien été ajouté');
+                    return header('Location: index.php?route=admin');
+                }
+                return $this->view->render('add_article', [
+                    'post' => $post,
+                    'errors' => $errors
+                ]);
             }
             return $this->view->render('add_article');
         } else {
@@ -49,9 +56,18 @@ class BackController extends Controller
             //     return header('Location: index.php?route=admin');
             // }
             if ($this->reqMethod === 'POST') {
-                $result = $this->articleDAO->editArticle($post, $articleId);
-                $this->session->set('add_article', 'Votre article a bien été modifié');
-                return header('Location: index.php?route=admin');
+                $errors = $this->validation->validate($post, 'Article');
+                if(!$errors) {
+                    $this->articleDAO->editArticle($post, $articleId);
+                    $this->session->set('add_article', 'Votre article a bien été modifié');
+                    return header('Location: index.php?route=admin');
+                }
+                return $this->view->render('edit_article', [
+                    'post' => $post,
+                    'errors' => $errors,
+                    'article' => $article,
+                    'articleId' => $articleId
+                ]);
             }
             return $this->view->render('edit_article', [
                 'post' => $post,
@@ -82,11 +98,22 @@ class BackController extends Controller
         $isValid = $this->userDAO->checkTokenAndEmail($get->get('token'), $get->get('email'));
         if ($isValid) {
             if ($this->reqMethod === 'POST') {
-                $user = $this->userDAO->getUserFromEmail($post->get('email'));
-                $this->userDAO->resetToken($user->getId());
-                $this->userDAO->changePassword($user->getId(), $post->get('password'));
-                $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
-                return header('Location: index.php');
+                $errors = $this->validation->validate($post, 'User');
+                if($post->get('password') !== $post->get('cPassword')) {
+                    $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+                }
+                if(!$errors) {
+                    $user = $this->userDAO->getUserFromEmail($post->get('email'));
+                    $this->userDAO->resetToken($user->getId());
+                    $this->userDAO->changePassword($user->getId(), $post->get('password'));
+                    $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
+                    return header('Location: index.php');
+                }
+                return $this->view->render('password_recovery', [
+                    'error' => $errors['password'],
+                    'token' => $get->get('token'),
+                    'email' => $get->get('email')
+                ]);
             }
             return $this->view->render('password_recovery', [
                 'token' => $get->get('token'),
@@ -114,28 +141,38 @@ class BackController extends Controller
         if ($this->isLoggedIn()) {
             $user = $this->userDAO->getUser($session->get('id'));
             if ($this->reqMethod === 'POST') {
+                $errors = $this->validation->validate($post, 'User');
                 $currentEmail = $post->get('email');
                 $password = $post->get('password');
                 $newEmail = $post->get('newEmail');
                 $userAtNewEmail = $this->userDAO->getUserFromEmail($newEmail);
                 $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-                if (
-                    $user->getEmail() !== $currentEmail ||
-                    !$isPasswordValid ||
-                    $userAtNewEmail
-                ) {
-                    $this->session->set('login_message', 'Erreur');
-                    return header('Location: index.php');
+                if ($userAtNewEmail) {
+                    $errors['newEmail'] = '<p class="red-text">Un compte avec cette adresse Email a déja été créé</p>';
                 }
-
-                $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
-                $token = str_shuffle($token);
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=changeEmail&token=" . $token . "&email=" . $currentEmail . "&newEmail=" . $newEmail;
-                $mail = new Mail();
-                $mail->sendEmailChange($post, $link, $user);
-                $this->userDAO->addToken($session->get('id'), $token);
-                $this->session->set('profile_change', 'Un email de confirmation vous a été envoyé');
-                return header('Location: index.php?route=profile');
+                if(!$isPasswordValid) {
+                    $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
+                }
+                if($user->getEmail() !== $currentEmail) {
+                    $errors['email'] = '<p class="red-text">L\'adresse Email est incorrecte</p>';
+                }
+                if(!$errors) {
+                    $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
+                    $token = str_shuffle($token);
+                    $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=changeEmail&token=" . $token . "&email=" . $currentEmail . "&newEmail=" . $newEmail;
+                    $mail = new Mail();
+                    $mail->sendEmailChange($post, $link, $user);
+                    $this->userDAO->addToken($session->get('id'), $token);
+                    $this->session->set('profile_change', 'Un email de confirmation vous a été envoyé');
+                    return header('Location: index.php?route=profile');
+                }
+                return $this->view->render('profile', [
+                    'emailErrors' => $errors,
+                    'emailPost' => $post,
+                    'session' => $session
+                ], [
+                    'profil'
+                ]);
             } else {
                 $token = $get->get('token');
                 $currentEmail = $get->get('email');
@@ -163,25 +200,33 @@ class BackController extends Controller
         if ($this->isLoggedIn()) {
             $user = $this->userDAO->getUser($session->get('id'));
             if ($this->reqMethod === 'POST') {
+                $errors = $this->validation->validate($post, 'User');
                 $email = $post->get('email');
                 $password = $post->get('password');
                 $newPassword = $post->get('newPassword');
                 $cNewPassword = $post->get('cNewPassword');
                 $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
                 if ($user->getEmail() !== $email) {
-                    $this->session->set('profile_change', 'Erreur: l\'email n\'est pas correct');
-                    return header('Location: index.php');
+                    $errors['email'] = '<p class="red-text">L\'adresse Email est incorrecte</p>';
                 }
                 if (!$isPasswordValid) {
-                    $this->session->set('profile_change', 'Erreur: le mot de passe n\'est pas correct');
-                    return header('Location: index.php');
+                    $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
                 }
                 if ($newPassword !== $cNewPassword) {
-                    $this->session->set('profile_change', 'Erreur: les mots de passe ne correspondent pas');
-                    return header('Location: index.php');
+                    $errors['newPassword'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
                 }
-                $this->userDAO->changePassword($user->getId(), $newPassword);
-                $this->session->set('profile_change', 'Le mot de passe a bien été changé');
+                if(!$errors) {
+                    $this->userDAO->changePassword($user->getId(), $newPassword);
+                    $this->session->set('profile_change', 'Le mot de passe a bien été changé');
+                    return header('Location: index.php?route=profile');
+                }
+                return $this->view->render('profile', [
+                    'pwErrors' => $errors,
+                    'pwPost' => $post,
+                    'session' => $session
+                ], [
+                    'profil'
+                ]);
             }
             return header('Location: index.php?route=profile');
         } else {
@@ -195,21 +240,27 @@ class BackController extends Controller
         if($this->isLoggedIn()) {
             $user = $this->userDAO->getUser($session->get('id'));
             if($this->reqMethod === 'POST') {
+                $wrongInputs = '';
                 $email = $post->get('email');
                 $password = $post->get('password');
                 $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-                if ($user->getEmail() !== $email) {
-                    $this->session->set('profile_change', 'Erreur: l\'email n\'est pas correct');
+                if ($user->getEmail() !== $email || !$isPasswordValid) {
+                    $wrongInputs = '<p class="red-text">L\'adresse Email et/ou le mot de passe est incorrect(e)</p>';
+                }
+                if(!$wrongInputs) {
+                    $this->userDAO->deleteUser($user->getId());
+                    $session->stop();
+                    $session->start();
+                    $this->session->set('profile_change', 'Votre compte a bien été supprimé');
                     return header('Location: index.php');
                 }
-                if (!$isPasswordValid) {
-                    $this->session->set('profile_change', 'Erreur: le mot de passe n\'est pas correct');
-                    return header('Location: index.php');
-                }
-                $this->userDAO->deleteUser($user->getId());
-                $session->stop();
-                $session->start();
-                $this->session->set('profile_change', 'Votre compte a bien été supprimé');
+                return $this->view->render('profile', [
+                    'delAccountError' => $wrongInputs,
+                    'delAccountPost' => $post,
+                    'session' => $session
+                ], [
+                    'profil'
+                ]); 
             }
             return header('Location: index.php');
         } else {
