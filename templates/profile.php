@@ -7,23 +7,26 @@
 </p>
 
 <ul class="collapsible expandable">
-    <li>
+    <li class="<?= isset($emailErrors) ? 'active' : '' ?>">
         <div class="collapsible-header"><i class="material-icons">email</i>E-mail</div>
         <div class="collapsible-body">
             <h5>Changer l'adresse E-mail</h5>
             <form method="POST" action="index.php?route=changeEmail">
                 <div class="row">
                     <div class="input-field col s12">
-                        <label for="email">Adresse E-mail actuelle</label>
-                        <input type="email" id="email" name="email">
+                        <label for="changeMailEmail">Adresse E-mail actuelle</label>
+                        <input type="email" id="changeMailEmail" name="email" value="<?= isset($emailPost) ? $emailPost->get('email') : ''; ?>">
+                        <?= isset($emailErrors) ? $emailErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" id="password" name="password">
+                        <label for="changeMailPassword">Mot de passe</label>
+                        <input type="password" id="changeMailPassword" name="password">
+                        <?= isset($emailErrors) ? $emailErrors['password'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <label for="newEmail">Nouvelle adresse E-mail</label>
                         <input type="email" id="newEmail" name="newEmail">
+                        <?= isset($emailErrors) ? $emailErrors['newEmail'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <button type="submit" class="btn green">Changer l'adresse E-mail</button>
@@ -32,23 +35,26 @@
             </form>
         </div>
     </li>
-    <li>
+    <li class="<?= isset($pwErrors) ? 'active' : '' ?>">
         <div class="collapsible-header"><i class="material-icons">security</i>Mot de passe</div>
         <div class="collapsible-body">
             <h5>Changer le mot de passe</h5>
             <form method="POST" action="index.php?route=changePassword">
                 <div class="row">
                     <div class="input-field col s12">
-                        <label for="email">Adresse E-mail</label>
-                        <input type="email" id="email" name="email">
+                        <label for="changePasswordEmail">Adresse E-mail</label>
+                        <input type="email" id="changePasswordEmail" name="email" value="<?= isset($pwPost) ? $pwPost->get('email') : ''; ?>">
+                        <?= isset($pwErrors) ? $pwErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" id="password" name="password">
+                        <label for="changePasswordPassword">Mot de passe</label>
+                        <input type="password" id="changePasswordPassword" name="password">
+                        <?= isset($pwErrors) ? $pwErrors['password'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <label for="newPassword">Nouveau mot de passe</label>
                         <input type="password" id="newPassword" name="newPassword">
+                        <?= isset($pwErrors) ? $pwErrors['newPassword'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <label for="cNewPassword">Confirmer le mot de passe</label>
@@ -64,18 +70,19 @@
 </ul>
 
 <ul class="collapsible">
-    <li>
+    <li class="<?= isset($delAccountError) ? 'active' : '' ?>">
         <div class="collapsible-header red lighten-3"><i class="material-icons">whatshot</i>Danger Zone</div>
         <div class="collapsible-body red lighten-4">
             <h5>Supprimer le compte</h5>
             <form method="POST" action="index.php?route=deleteAccount">
+                <?= isset($delAccountError) ? $delAccountError : '' ?>
                 <div class="input-field col s12">
-                    <label for="email">Adresse E-mail</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="deleteAccountEmail">Adresse E-mail</label>
+                    <input type="email" id="deleteAccountEmail" name="email" value="<?= isset($delAccountPost) ? $delAccountPost->get('email') : ''; ?>">
                 </div>
                 <div class="input-field col s12">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="deleteAccountPassword">Mot de passe</label>
+                    <input type="password" id="deleteAccountPassword" name="password">
                 </div>
                 <div class="input-field col s12">
                     <button type="submit" class="btn red">Supprimer mon compte</button>
