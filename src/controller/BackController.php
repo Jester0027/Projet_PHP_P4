@@ -98,11 +98,22 @@ class BackController extends Controller
         $isValid = $this->userDAO->checkTokenAndEmail($get->get('token'), $get->get('email'));
         if ($isValid) {
             if ($this->reqMethod === 'POST') {
-                $user = $this->userDAO->getUserFromEmail($post->get('email'));
-                $this->userDAO->resetToken($user->getId());
-                $this->userDAO->changePassword($user->getId(), $post->get('password'));
-                $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
-                return header('Location: index.php');
+                $errors = $this->validation->validate($post, 'User');
+                if($post->get('password') !== $post->get('cPassword')) {
+                    $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+                }
+                if(!$errors) {
+                    $user = $this->userDAO->getUserFromEmail($post->get('email'));
+                    $this->userDAO->resetToken($user->getId());
+                    $this->userDAO->changePassword($user->getId(), $post->get('password'));
+                    $this->session->set('pw_change', 'Votre mot de passe a bien été mis a jour');
+                    return header('Location: index.php');
+                }
+                return $this->view->render('password_recovery', [
+                    'error' => $errors['password'],
+                    'token' => $get->get('token'),
+                    'email' => $get->get('email')
+                ]);
             }
             return $this->view->render('password_recovery', [
                 'token' => $get->get('token'),
