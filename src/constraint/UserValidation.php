@@ -35,6 +35,14 @@ class UserValidation
             $error = $this->checkEmail($name, $value);
             $this->addError($name, $error);
         }
+        else if($name === 'newEmail') {
+            $error = $this->checkEmail($name, $value);
+            $this->addError($name, $error);
+        }
+        else if($name === 'newPassword') {
+            $error = $this->checkPassword($name, $value);
+            $this->addError($name, $error);
+        }
     }
 
     private function addError($name, $error)
