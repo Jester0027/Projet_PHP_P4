@@ -4,15 +4,18 @@
     <div class="row">
         <div class="input-field col s12">
             <label for="title">Titre</label>
-            <input type="text" name="title" id="title" value="<?= htmlspecialchars($article->getTitle()) ?>">
+            <input type="text" name="title" id="title" value="<?= isset($errors) ? htmlspecialchars($post->get('title')) : htmlspecialchars($article->getTitle()) ?>">
+            <?= isset($errors['title']) ? $errors['title'] : '' ?>
         </div>
         <div class="col s12">
             <label for="content">Contenu</label>
-            <textarea class="tinymce" name="content" id="content"><?= htmlspecialchars($article->getContent()) ?></textarea>
+            <textarea class="tinymce" name="content" id="content"><?= isset($errors) ? htmlspecialchars($post->get('content')) : htmlspecialchars($article->getContent()) ?></textarea>
+            <?= isset($errors['content']) ? $errors['content'] : '' ?>
         </div>
         <div class="input-field col s12">
             <label for="caption">Description</label>
-            <textarea class="materialize-textarea" name="caption" id="caption"><?= htmlspecialchars($article->getCaption()) ?></textarea>
+            <textarea class="materialize-textarea" name="caption" id="caption"><?= isset($errors) ? htmlspecialchars($post->get('caption')) : htmlspecialchars($article->getCaption()) ?></textarea>
+            <?= isset($errors['caption']) ? $errors['caption'] : '' ?>
         </div>
     </div>
     <div class="row">
