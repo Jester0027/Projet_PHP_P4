@@ -11,18 +11,54 @@ class BackController extends Controller
     public function admin()
     {
         if ($this->isAdmin()) {
-            $articles = $this->articleDAO->getArticles();
-            $users = $this->userDAO->getUsers();
-            $reportedComments = $this->commentDAO->getReportedComments();
-            return $this->view->render('admin', [
-                'articles' => $articles,
-                'users' => $users,
-                'reportedComments' => $reportedComments
+            return $this->view->render('admin', [], [
+                'admin'
+            ], [
+                'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'
             ]);
         } else {
             $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
             header('Location: index.php');
         }
+    }
+
+    public function _adminArticles()
+    {
+        if($this->isAdmin()) {
+            $articles = $this->articleDAO->getArticles();
+            $this->view->renderTemplate('adminArticles', [
+                'articles' => $articles
+            ]);
+            return;
+        }
+        echo 'Forbidden Access';
+        return header("http/1.0 403 forbidden");
+    }
+
+    public function _adminUsers()
+    {
+        if($this->isAdmin()) {
+            $users = $this->userDAO->getUsers();
+            $this->view->renderTemplate('adminUsers', [
+                'users' => $users
+            ]);
+            return;
+        }
+        echo 'Forbidden Access';
+        return header("http/1.0 403 forbidden");
+    }
+
+    public function _adminReportedComments()
+    {
+        if($this->isAdmin()) {
+            $reportedComments = $this->commentDAO->getReportedComments();
+            $this->view->renderTemplate('adminReports', [
+                'reportedComments' => $reportedComments
+            ]);
+            return;
+        }
+        echo 'Forbidden Access';
+        return header("http/1.0 403 forbidden");
     }
 
     public function addArticle(Parameter $post, Session $session)
