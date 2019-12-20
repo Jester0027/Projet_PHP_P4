@@ -29,9 +29,16 @@ class BackController extends Controller
     {
         if ($this->isAdmin()) {
             if ($this->reqMethod === 'POST') {
-                $this->articleDAO->addArticle($post, $session);
-                $this->session->set('add_article', 'Votre article a bien été ajouté');
-                return header('Location: index.php?route=admin');
+                $errors = $this->validation->validate($post, 'Article');
+                if(!$errors) {
+                    $this->articleDAO->addArticle($post, $session);
+                    $this->session->set('add_article', 'Votre article a bien été ajouté');
+                    return header('Location: index.php?route=admin');
+                }
+                return $this->view->render('add_article', [
+                    'post' => $post,
+                    'errors' => $errors
+                ]);
             }
             return $this->view->render('add_article');
         } else {
@@ -49,9 +56,18 @@ class BackController extends Controller
             //     return header('Location: index.php?route=admin');
             // }
             if ($this->reqMethod === 'POST') {
-                $result = $this->articleDAO->editArticle($post, $articleId);
-                $this->session->set('add_article', 'Votre article a bien été modifié');
-                return header('Location: index.php?route=admin');
+                $errors = $this->validation->validate($post, 'Article');
+                if(!$errors) {
+                    $this->articleDAO->editArticle($post, $articleId);
+                    $this->session->set('add_article', 'Votre article a bien été modifié');
+                    return header('Location: index.php?route=admin');
+                }
+                return $this->view->render('edit_article', [
+                    'post' => $post,
+                    'errors' => $errors,
+                    'article' => $article,
+                    'articleId' => $articleId
+                ]);
             }
             return $this->view->render('edit_article', [
                 'post' => $post,
