@@ -69,6 +69,12 @@ class Router
                     $this->backController->changePassword($this->request->getPost(), $this->request->getSession());
                 } else if ($route === 'deleteAccount') {
                     $this->backController->deleteAccount($this->request->getPost(), $this->request->getSession());
+                } else if ($route === '_adminArticles') {
+                    $this->backController->_adminArticles();
+                } else if ($route === '_adminUsers') {
+                    $this->backController->_adminUsers();
+                } else if ($route === '_adminReports') {
+                    $this->backController->_adminReportedComments();
                 } else {
                     $this->errorController->get404();
                 }
