@@ -1,98 +1,36 @@
-M.AutoInit();
+const preloader = '<div class="preloader-wrapper big active loader"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>';
 
-const preloader = `
-    <div class="preloader-wrapper big active loader">
-        <div class="spinner-layer spinner-blue-only">
-            <div class="circle-clipper left">
-                <div class="circle"></div>
-            </div><div class="gap-patch">
-                <div class="circle"></div>
-            </div><div class="circle-clipper right">
-                <div class="circle"></div>
-            </div>
-        </div>
-    </div>
-`;
-
-$(function() {
+$(function () {
     console.log('👍 dom ready');
 
-    const getArticles = function() {
-        $('#articles').html(preloader);
+    const getData = (route, id) => {
+        $(id).html(preloader);
         $.ajax({
-            url: 'index.php?route=_adminArticles',
+            url: 'index.php?route=' + route,
             type: 'GET',
             dataType: 'html',
-            success: function(res, status) {
+            success: function (res, status) {
                 console.log(status + " 👍");
-                $('#articles').html(res);
+                $(id).html(res);
             },
-            error: function(res, status, err) {
+            error: function (res, status, err) {
                 console.log(status + "'s Response 👉 " + res);
                 console.log("Error 👉 " + err);
-                $('#articles').html(`
-                    <p class="red-text">Erreur lors de la requete</p>
-                    <p class="red-text">${res.status} ${res.statusText}</p>
-                `)
+                $(id).html('<p class="red-text">Erreur lors de la requete</p><p class="red-text">' + res.status + ' ' + res.statusText + '</p>');
             },
-            complete: function(res, status) {
+            complete: function (res, status) {
                 console.log(status + " response 👇 ");
                 console.dir(res);
             }
         });
     }
 
-    const getUsers = function() {
-        $('#users').html(preloader);
-        $.ajax({
-            url: 'index.php?route=_adminUsers',
-            type: 'GET',
-            dataType: 'html',
-            success: function(res, status) {
-                console.log("Success 👍");
-                $('#users').html(res);
-            },
-            error: function(res, status, err) {
-                console.log(status + "'s Response 👉 " + res);
-                console.log("Error 👉 " + err);
-                $('#users').html(`
-                    <p class="red-text">Erreur ajax</p>
-                    <p class="red-text">${res.status} ${res.statusText}</p>
-                `)
-            },
-            complete: function(res, status) {
-                console.log(status + " response 👇 ");
-                console.dir(res);
-            }
-        });
-    }
-
-    const getReportedComments = function() {
-        $('#reports').html(preloader);
-        $.ajax({
-            url: 'index.php?route=_adminReports',
-            type: 'GET',
-            dataType: 'html',
-            success: function(res, status) {
-                console.log(status + " 👍");
-                $('#reports').html(res);
-            },
-            error: function(res, status, err) {
-                console.log(status + "'s Response 👉 " + res);
-                console.log("Error 👉 " + err);
-                $('#articles').html(`
-                    <p class="red-text">Erreur ajax</p>
-                    <p class="red-text">${res.status} ${res.statusText}</p>
-                `)
-            },
-            complete: function(res, status) {
-                console.log(status + " response 👇 ");
-                console.dir(res);
-            }
-        });
-    }
+    const getArticles = function () { getData("_adminArticles", "#articles") }
+    const getUsers = function () { getData("_adminUsers", "#users") }
+    const getReportedComments = function () { getData("_adminReports", "#reports") }
 
     getArticles();
+    
     $('#articlesSelector').on('click', getArticles);
     $('#usersSelector').on('click', getUsers);
     $('#reportsSelector').on('click', getReportedComments);
