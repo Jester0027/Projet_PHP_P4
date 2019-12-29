@@ -27,8 +27,11 @@
     </main>
     <?= $footer ?>
 
-    <?php foreach($scriptFiles as $file) { ?>
-        <script type="text/javascript" src="public/js/<?= $file ?>.js"></script>
+    <?php foreach($cdn as $link) { ?>
+        <script type="text/javascript" src="<?= $link ?>"></script>
+    <?php } ?>
+    <?php foreach($scriptFiles as $jsFile) { ?>
+        <script type="text/javascript" src="public/js/<?= $jsFile ?>.js"></script>
     <?php } ?>
 </body>
 </html>

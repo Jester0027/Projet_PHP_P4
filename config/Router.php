@@ -64,11 +64,19 @@ class Router
                 } else if ($route === 'profile') {
                     $this->backController->profile($this->request->getSession());
                 } else if ($route === 'changeEmail') {
-                    $this->backController->changeEmail($this->request->getPost(), $this->request->getSession(), $this->request->getGet());
+                    $this->backController->changeEmail($this->request->getPost(), $this->request->getSession());
+                } else if ($route === 'confirmChangeEmail') {
+                    $this->backController->confirmChangeEmail($this->request->getGet(), $this->request->getSession());
                 } else if ($route === 'changePassword') {
                     $this->backController->changePassword($this->request->getPost(), $this->request->getSession());
                 } else if ($route === 'deleteAccount') {
                     $this->backController->deleteAccount($this->request->getPost(), $this->request->getSession());
+                } else if ($route === '_adminArticles') {
+                    $this->backController->_adminArticles();
+                } else if ($route === '_adminUsers') {
+                    $this->backController->_adminUsers();
+                } else if ($route === '_adminReports') {
+                    $this->backController->_adminReportedComments();
                 } else {
                     $this->errorController->get404();
                 }

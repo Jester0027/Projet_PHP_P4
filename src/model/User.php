@@ -92,4 +92,12 @@ class User
     {
         $this->token = $token;
     }
+
+    public function generateToken()
+    {
+        $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
+        $token = str_shuffle($token);
+        $this->token = $token;
+        return $this->token;
+    }
 }

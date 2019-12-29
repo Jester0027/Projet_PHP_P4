@@ -7,3 +7,20 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+header {
+    z-index: 10;
+}
+
+.tabs {
+    z-index: 0;
+}
+
+.loader {
+    position: absolute;
+    margin: auto;
+    top: 50vh;
+    bottom: 50vh;
+    left: 0;
+    right: 0;
+}
