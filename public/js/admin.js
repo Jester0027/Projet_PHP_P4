@@ -4,6 +4,9 @@ $(function () {
     console.log('👍 dom ready');
 
     const getData = (route, id) => {
+        $("#articles").html('');
+        $("#users").html('');
+        $("#reports").html('');
         $(id).html(preloader);
         $.ajax({
             url: 'index.php?route=' + route,
@@ -30,7 +33,7 @@ $(function () {
     const getReportedComments = function () { getData("_adminReports", "#reports") }
 
     getArticles();
-    
+
     $('#articlesSelector').on('click', getArticles);
     $('#usersSelector').on('click', getUsers);
     $('#reportsSelector').on('click', getReportedComments);
