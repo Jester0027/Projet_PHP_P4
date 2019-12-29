@@ -156,7 +156,8 @@ class BackController extends Controller
             header('Location: index.php');
             exit();
         }
-        return $this->view->render('profile', ['session' => $session], ['profil']);
+        $user = $this->userDAO->getUser($session->get('id'));
+        return $this->view->render('profile', ['user' => $user], ['profil']);
     }
 
     public function changeEmail(Parameter $post, Session $session)
@@ -186,10 +187,6 @@ class BackController extends Controller
             if (!$isPasswordValid) {
                 $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
             }
-            if ($user->getEmail() !== $currentEmail) {
-                $errors['emailColor'] = 'red-text';
-                $errors['email'] = '<p class="red-text">L\'adresse Email est incorrecte</p>';
-            }
             if (!$errors) {
                 $user->generateToken();
                 $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirmChangeEmail&token=" . $user->getToken() . "&email=" . $currentEmail . "&newEmail=" . $newEmail;
@@ -207,7 +204,7 @@ class BackController extends Controller
         return $this->view->render('profile', [
             'emailErrors' => $errors,
             'emailPost' => $post,
-            'session' => $session
+            'user' => $user
         ], ['profil']);
     }
 
@@ -250,9 +247,6 @@ class BackController extends Controller
             $newPassword = $post->get('newPassword');
             $cNewPassword = $post->get('cNewPassword');
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-            if ($user->getEmail() !== $email) {
-                $errors['email'] = '<p class="red-text">L\'adresse Email est incorrecte</p>';
-            }
             if (!$isPasswordValid) {
                 $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
             }
@@ -269,7 +263,7 @@ class BackController extends Controller
         return $this->view->render('profile', [
             'pwErrors' => $errors,
             'pwPost' => $post,
-            'session' => $session
+            'user' => $user
         ], ['profil']);
     }
 
@@ -283,11 +277,10 @@ class BackController extends Controller
         $user = $this->userDAO->getUser($session->get('id'));
         if ($this->reqMethod === 'POST') {
             $wrongInputs = '';
-            $email = $post->get('email');
             $password = $post->get('password');
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-            if ($user->getEmail() !== $email || !$isPasswordValid) {
-                $wrongInputs = '<p class="red-text">L\'adresse Email et/ou le mot de passe est incorrect(e)</p>';
+            if (!$isPasswordValid) {
+                $wrongInputs = '<p class="red-text">Le mot de passe est incorrect</p>';
             }
             if (!$wrongInputs) {
                 $this->userDAO->deleteUser($user->getId());
@@ -301,7 +294,7 @@ class BackController extends Controller
         return $this->view->render('profile', [
             'delAccountError' => $wrongInputs,
             'delAccountPost' => $post,
-            'session' => $session
+            'user' => $user
         ], ['profil']);
     }
 

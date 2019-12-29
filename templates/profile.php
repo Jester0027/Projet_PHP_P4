@@ -1,6 +1,6 @@
-<?php $this->title = 'Profil : ' . $session->get('username'); ?>
+<?php $this->title = 'Profil : ' . $this->session->get('username'); ?>
 
-<h1>Profil de <?= $session->get('username') ?></h1>
+<h1>Profil de <?= $this->session->get('username') ?></h1>
 
 <p>
     <?= $this->session->show('profile_change'); ?>
@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <label for="changeMailEmail">Adresse E-mail actuelle</label>
-                        <input type="email" id="changeMailEmail" name="email" value="<?= isset($emailPost) ? $emailPost->get('email') : ''; ?>">
+                        <input type="email" id="changeMailEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
                         <?= isset($emailErrors) ? $emailErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <label for="changePasswordEmail">Adresse E-mail</label>
-                        <input type="email" id="changePasswordEmail" name="email" value="<?= isset($pwPost) ? $pwPost->get('email') : ''; ?>">
+                        <input type="email" id="changePasswordEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
                         <?= isset($pwErrors) ? $pwErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
@@ -78,7 +78,7 @@
                 <?= isset($delAccountError) ? $delAccountError : '' ?>
                 <div class="input-field col s12">
                     <label for="deleteAccountEmail">Adresse E-mail</label>
-                    <input type="email" id="deleteAccountEmail" name="email" value="<?= isset($delAccountPost) ? $delAccountPost->get('email') : ''; ?>">
+                    <input type="email" id="deleteAccountEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
                 </div>
                 <div class="input-field col s12">
                     <label for="deleteAccountPassword">Mot de passe</label>
