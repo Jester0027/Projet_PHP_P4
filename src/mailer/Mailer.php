@@ -19,7 +19,7 @@ abstract class Mailer
             $mail->Subject = $subject;
             $mail->Body = $content;
     
-            $mail->send();
+            return $mail->send();
         } catch(Exception $e) {
             return $e;
         }
