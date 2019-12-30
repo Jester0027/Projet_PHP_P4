@@ -11,6 +11,23 @@ main {
 header {
     z-index: 10;
 }
+.nav-wrapper>.container {
+    height: inherit;
+}
+
+.brand-logo {
+    height: inherit;
+}
+
+#logo-block {
+    height: inherit;
+}
+
+#logo {
+    object-fit: contain;
+    height: inherit;
+    padding-bottom: 5px;
+}
 
 .tabs {
     z-index: 0;

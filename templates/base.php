@@ -27,6 +27,7 @@
     </main>
     <?= $footer ?>
 
+    <script src="public/js/main.js"></script>
     <?php foreach($cdn as $link) { ?>
         <script type="text/javascript" src="<?= $link ?>"></script>
     <?php } ?>
