@@ -30,22 +30,23 @@ $route = $get->get('route');
         </div>
     </nav>
 </header>
+
 <ul id="slide-out" class="sidenav">
     <?php if ($session->get('username')) {
         ?>
-        <li class="<?= $route === 'logout' ? 'active' : '' ?>"><a href="./index.php?route=logout">Se déconnecter</a></li>
-        <li class="<?= $route === 'profile' ? 'active' : '' ?>"><a href="./index.php?route=profile">Profil</a></li>
+        <li class="<?= $route === 'logout' ? 'active' : '' ?>"><a class="red-text" href="./index.php?route=logout">Se déconnecter<i class="material-icons left red-text">exit_to_app</i></a></li>
+        <li class="<?= $route === 'profile' ? 'active' : '' ?>"><a href="./index.php?route=profile">Profil<i class="material-icons left">account_box</i></a></li>
     <?php
     } else {
         ?>
-        <li class="<?= $route === 'login' ? 'active' : '' ?>"><a href="./index.php?route=login">Se connecter</a></li>
-        <li class="<?= $route === 'register'  ? 'active' : '' ?>"><a href="./index.php?route=register">S'inscrire</a></<a>
+        <li class="<?= $route === 'login' ? 'active' : '' ?>"><a href="./index.php?route=login">Se connecter<i class="material-icons left">person</i></a></li>
+        <li class="<?= $route === 'register'  ? 'active' : '' ?>"><a href="./index.php?route=register">S'inscrire<i class="material-icons left">person_add</i></a></<a>
     <?php
     } ?>
-    <li class="<?= !$route ? 'active' : '' ?>"><a href="./index.php">Accueil</a></li>
+    <li class="<?= !$route ? 'active' : '' ?>"><a href="./index.php">Accueil<i class="material-icons left">home</i></a></li>
     <?php if ($session->get('role') === 'admin') {
         ?>
-        <li class="<?= $route === 'admin' ? 'active' : '' ?>"><a href="./index.php?route=admin">Administration</a></li>
+        <li class="<?= $route === 'admin' ? 'active' : '' ?>"><a href="./index.php?route=admin">Administration<i class="material-icons left">supervisor_account</i></a></a></li>
     <?php
     } ?>
 </ul>
