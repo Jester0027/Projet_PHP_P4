@@ -22,6 +22,7 @@
 <div class="row">
     <h2>Commentaires</h2>
     <form method="POST" action="./index.php?route=addComment&articleId=<?= $article->getId(); ?>">
+        <p class="red-text"><?= $this->session->show('comment') ?></p>
         <div class="input-field col s12">
             <label for="content">Ajouter un commentaire</label>
             <textarea class="materialize-textarea" name="content" id="content"><?= isset($post) ? $post->get('content') : '' ?></textarea>
@@ -36,7 +37,7 @@
         <div class="row">
             <h6><?= htmlspecialchars($comment->getAuthor()); ?> le <?= htmlspecialchars($comment->getCreatedAt()); ?></h6>
             <p><?= htmlspecialchars($comment->getContent()); ?></p>
-            <a class="red-text" href="index.php?route=reportComment&commentId=<?= $comment->getId() ?>">Signaler ce commentaire</a>
+            <a class="red-text" href="index.php?route=reportComment&commentId=<?= $comment->getId() ?>&articleId=<?= $article->getId() ?>">Signaler ce commentaire</a>
         </div>
     <?php endforeach; ?>
 </div>

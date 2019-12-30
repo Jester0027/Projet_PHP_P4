@@ -75,17 +75,19 @@
         <div class="collapsible-body red lighten-4">
             <h5>Supprimer le compte</h5>
             <form method="POST" action="index.php?route=deleteAccount">
-                <?= isset($delAccountError) ? $delAccountError : '' ?>
-                <div class="input-field col s12">
-                    <label for="deleteAccountEmail">Adresse E-mail</label>
-                    <input type="email" id="deleteAccountEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
-                </div>
-                <div class="input-field col s12">
-                    <label for="deleteAccountPassword">Mot de passe</label>
-                    <input type="password" id="deleteAccountPassword" name="password">
-                </div>
-                <div class="input-field col s12">
-                    <button type="submit" class="btn red">Supprimer mon compte</button>
+                <div class="row">
+                    <?= isset($delAccountError) ? $delAccountError : '' ?>
+                    <div class="input-field col s12">
+                        <label for="deleteAccountEmail">Adresse E-mail</label>
+                        <input type="email" id="deleteAccountEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
+                    </div>
+                    <div class="input-field col s12">
+                        <label for="deleteAccountPassword">Mot de passe</label>
+                        <input type="password" id="deleteAccountPassword" name="password">
+                    </div>
+                    <div class="input-field col s12">
+                        <button type="submit" class="btn red">Supprimer mon compte</button>
+                    </div>
                 </div>
             </form>
         </div>
