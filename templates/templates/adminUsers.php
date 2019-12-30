@@ -1,7 +1,4 @@
 <h3>Utilisateurs</h3>
-<p class="indigo-text">
-    <?= $this->session->show('user_action') ?>
-</p>
 <table>
     <tr>
         <th>ID</th>

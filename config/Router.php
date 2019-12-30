@@ -52,11 +52,11 @@ class Router
                 } else if ($route === 'editArticle') {
                     $this->backController->editArticle($this->request->getPost(), $this->request->getGet()->get('articleId'), $this->request->getSession());
                 } else if ($route === 'deleteComment') {
-                    $this->backController->deleteComment();
+                    $this->backController->deleteComment($this->request->getGet());
                 } else if ($route === 'reportComment') {
-                    $this->frontController->reportComment();
+                    $this->frontController->reportComment($this->request->getGet());
                 } else if ($route === 'pardonComment') {
-                    $this->backController->pardonComment();
+                    $this->backController->pardonComment($this->request->getGet());
                 } else if ($route === 'lostPassword') {
                     $this->frontController->lostPassword($this->request->getPost());
                 } else if ($route === 'passwordRecovery') {

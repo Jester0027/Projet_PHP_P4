@@ -16,7 +16,7 @@
             <td><?= $reportedComment->getAuthor() ?></td>
             <td class="right-align">
                 <a id="delete_user" href="index.php?route=deleteComment&commentId=<?= $reportedComment->getId() ?>" class="btn waves-effect waves-light red"><i class="material-icons left">delete</i>Supprimer</a>
-                <a href="index.php?index.php?route=pardonComment&commentId=<?= $reportedComment->getId() ?>" class="btn waves-effect waves-light green">Désignaler</a>
+                <a href="index.php?route=pardonComment&commentId=<?= $reportedComment->getId() ?>" class="btn waves-effect waves-light green">Désignaler</a>
             </td>
         </tr>
         <?php }

@@ -10,8 +10,6 @@
     </div>
 </div>
 
-<p><?= $this->session->show('login_message') ?></p>
-
 <h1>Administration</h1>
 
 

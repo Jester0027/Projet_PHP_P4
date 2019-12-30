@@ -348,11 +348,27 @@ class BackController extends Controller
         exit();
     }
 
-    public function deleteComment()
+    public function pardonComment(Parameter $get)
     {
+        if (!$this->isAdmin()) {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+            exit();
+        }
+        $this->commentDAO->pardonComment($get->get('commentId'));
+        $this->session->set('comment_action', 'Le commentaire a bien été pardonné');
+        header('Location: index.php?route=admin');
     }
 
-    public function pardonComment()
+    public function deleteComment(Parameter $get)
     {
+        if (!$this->isAdmin()) {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+            exit();
+        }
+        $this->commentDAO->deleteComment($get->get('commentId'));
+        $this->session->set('comment_action', 'Le commentaire a bien été supprimé');
+        header('Location: index.php?route=admin');
     }
 }

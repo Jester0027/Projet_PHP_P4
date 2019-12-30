@@ -51,9 +51,19 @@ class FrontController extends Controller
         ]);
     }
 
-    public function reportComment()
+    public function reportComment(Parameter $get)
     {
-
+        if(!$this->isLoggedIn()) {
+            $this->session->set('login', 'Vous devez vous connecter pour effectuer cette action');
+            header('Location: index.php?route=login');
+            exit();
+        } else if ($this->commentDAO->isAlreadyReported($get->get('commentId'))) {
+            $this->session->set('comment', 'Vous ne pouvez plus signaler ce commentaire');
+            header('Location: index.php?route=article&articleId=' . $get->get('articleId'));
+            exit();
+        }
+        $this->commentDAO->reportComment($get->get('commentId'));
+        header('Location: index.php?route=article&articleId=' . $get->get('articleId'));
     }
 
     public function login(Parameter $post)
