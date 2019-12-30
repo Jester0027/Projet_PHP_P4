@@ -93,11 +93,19 @@ class User
         $this->token = $token;
     }
 
-    public function generateToken()
+    public function generateToken(bool $setToken = true)
     {
-        $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
-        $token = str_shuffle($token);
-        $this->token = $token;
-        return $this->token;
+        $token = "";
+        $tokenStr = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_.~';
+        
+        for($i = 0; $i < 70; $i++) {
+            $token .= $tokenStr[rand(0, strlen($tokenStr)-1)];
+        }
+
+        if ($setToken) {
+            $this->token = $token;
+        }
+
+        return $token;
     }
 }
