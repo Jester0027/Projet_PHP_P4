@@ -108,6 +108,18 @@ class BackController extends Controller
         ]);
     }
 
+    public function deleteArticle(Parameter $get)
+    {
+        if (!$this->isAdmin()) {
+            $this->session->set('admin_access', 'Vous devez disposer d\'un acces administrateur');
+            header('Location: index.php');
+            exit();
+        }
+        $this->articleDAO->deleteArticle($get->get('articleId'));
+        $this->session->set('add_article', 'Votre article a bien été supprimé');
+        header('Location: index.php?route=admin');
+    }
+
     public function confirm(Parameter $get)
     {
         if ($get->get('token') && $get->get('email')) {

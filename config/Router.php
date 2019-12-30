@@ -33,6 +33,8 @@ class Router
                     $this->frontController->addComment($this->request->getSession(), $this->request->getPost(), $this->request->getGet()->get('articleId'));
                 } else if ($route === 'addArticle') {
                     $this->backController->addArticle($this->request->getPost(), $this->request->getSession());
+                } else if ($route === 'deleteArticle') {
+                    $this->backController->deleteArticle($this->request->getGet());
                 } else if ($route === 'login') {
                     $this->frontController->login($this->request->getPost());
                 } else if ($route === 'register') {
