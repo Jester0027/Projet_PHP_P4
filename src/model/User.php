@@ -93,7 +93,7 @@ class User
         $this->token = $token;
     }
 
-    public function generateToken(bool $setToken = true)
+    public function generateToken()
     {
         $token = "";
         $tokenStr = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_.~';
@@ -102,10 +102,29 @@ class User
             $token .= $tokenStr[rand(0, strlen($tokenStr)-1)];
         }
 
-        if ($setToken) {
-            $this->token = $token;
-        }
+        $this->token = $token;
+    }
 
-        return $token;
+    /**
+     * @return bool
+     */
+    public function register()
+    {
+        /**
+         * TODO: 
+         *  generer le token
+         *  enregistrer l'utilisateur
+         *  envoyer l'email
+         */
+    }
+
+    
+    public function checkRegister()
+    {
+        /**
+         * TODO:
+         *  Validate User
+         *  Vérifier les inputs
+         */
     }
 }

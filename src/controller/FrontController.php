@@ -5,6 +5,7 @@ namespace BlogApp\src\controller;
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\mailer\Mail;
+use BlogApp\src\model\User;
 use DateTime;
 use DateTimeZone;
 
@@ -127,14 +128,20 @@ class FrontController extends Controller
                 $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
             }
             if (!$errors) {
-                $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890*';
-                $token = str_shuffle($token);
+                $user = new User();
+
+                $user->register();
+
+                
+                $user->generateToken();
                 $createdAt = new DateTime();
                 $createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
-                $this->userDAO->register($post, $token, $createdAt->format('Y-m-d H:i:s'));
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $token . "&email=" . $post->get('email');
+                $this->userDAO->register($post, $user->getToken(), $createdAt->format('Y-m-d H:i:s'));
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $user->getToken() . "&email=" . $post->get('email');
                 $mail = new Mail();
                 $mail->sendConfirmation($post, $link);
+
+
                 $this->session->set('register', 'Un email de confirmation vous a été envoyé');
                 header('Location: index.php');
                 exit();

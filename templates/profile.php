@@ -8,7 +8,7 @@
 
 <ul class="collapsible expandable">
     <li class="<?= isset($emailErrors) ? 'active' : '' ?>">
-        <div class="collapsible-header"><i class="material-icons">email</i>E-mail</div>
+        <div class="collapsible-header"><i class="material-icons left">email</i>E-mail</div>
         <div class="collapsible-body">
             <h5>Changer l'adresse E-mail</h5>
             <form method="POST" action="index.php?route=changeEmail">
@@ -36,7 +36,7 @@
         </div>
     </li>
     <li class="<?= isset($pwErrors) ? 'active' : '' ?>">
-        <div class="collapsible-header"><i class="material-icons">security</i>Mot de passe</div>
+        <div class="collapsible-header"><i class="material-icons left">security</i>Mot de passe</div>
         <div class="collapsible-body">
             <h5>Changer le mot de passe</h5>
             <form method="POST" action="index.php?route=changePassword">
@@ -71,7 +71,7 @@
 
 <ul class="collapsible">
     <li class="<?= isset($delAccountError) ? 'active' : '' ?>">
-        <div class="collapsible-header red lighten-3"><i class="material-icons">whatshot</i>Danger Zone</div>
+        <div class="collapsible-header red lighten-3"><i class="material-icons left">whatshot</i>Danger Zone</div>
         <div class="collapsible-body red lighten-4">
             <h5>Supprimer le compte</h5>
             <form method="POST" action="index.php?route=deleteAccount">

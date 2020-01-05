@@ -10,9 +10,6 @@
     </div>
 </div>
 
-<h1>Administration</h1>
-
-
 <div class="row" id="articles"></div>
 
 <div class="row" id="users"></div>

@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col m6 offset-m3 s12">
-        <h2 class="center-align"><?= htmlspecialchars($article->getTitle()); ?></h2>
+        <h1 class="center-align article-title"><?= htmlspecialchars($article->getTitle()); ?></h1>
         
     </div>
     <div class="col s12">
@@ -20,7 +20,7 @@
 </div>
 
 <div class="row">
-    <h2>Commentaires</h2>
+    <h2 id="comments">Commentaires</h2>
     <form method="POST" action="./index.php?route=addComment&articleId=<?= $article->getId(); ?>">
         <p class="red-text"><?= $this->session->show('comment') ?></p>
         <div class="input-field col s12">
