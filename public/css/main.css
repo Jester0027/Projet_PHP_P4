@@ -29,6 +29,18 @@ header {
     padding-bottom: 5px;
 }
 
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2.2rem;
+}
+
+.collapsible-header.red.lighten-3 {
+    border-color: transparent;
+}
+
 .tabs {
     z-index: 0;
 }
