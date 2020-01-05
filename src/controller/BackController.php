@@ -182,7 +182,6 @@ class BackController extends Controller
         if ($this->reqMethod === 'POST') {
             $user = $this->userDAO->getUser($session->get('id'));
             $errors = $this->validation->validate($post, 'User');
-            $currentEmail = $post->get('email');
             $password = $post->get('password');
             $newEmail = $post->get('newEmail');
             $userAtNewEmail = $this->userDAO->getUserFromEmail($newEmail);
@@ -201,7 +200,7 @@ class BackController extends Controller
             }
             if (!$errors) {
                 $user->generateToken();
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirmChangeEmail&token=" . $user->getToken() . "&email=" . $currentEmail . "&newEmail=" . $newEmail;
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirmChangeEmail&token=" . $user->getToken() . "&email=" . $user->getEmail() . "&newEmail=" . $newEmail;
                 $mail = new Mail();
                 if ($mail->sendEmailChange($post, $link, $user)) {
                     $this->userDAO->addToken($session->get('id'), $user->getToken());
