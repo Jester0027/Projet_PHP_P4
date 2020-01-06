@@ -96,3 +96,7 @@ h2 {
     left: 0;
     right: 0;
 }
+
+footer li {
+    margin-top: 10px;
+}
