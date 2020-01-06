@@ -2,9 +2,9 @@
 
 <h1>Profil de <?= $this->session->get('username') ?></h1>
 
-<p>
+<div id="session" hidden>
     <?= $this->session->show('profile_change'); ?>
-</p>
+</div>
 
 <ul class="collapsible expandable">
     <li class="<?= isset($emailErrors) ? 'active' : '' ?>">
@@ -16,17 +16,16 @@
                     <div class="input-field col s12">
                         <label for="changeMailEmail">Adresse E-mail actuelle</label>
                         <input type="email" id="changeMailEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
-                        <?= isset($emailErrors) ? $emailErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <label for="changeMailPassword">Mot de passe</label>
                         <input type="password" id="changeMailPassword" name="password">
-                        <?= isset($emailErrors) ? $emailErrors['password'] : '' ?>
+                        <p class="red-text"><?= $emailErrors['password'] ?? '' ?></p>
                     </div>
                     <div class="input-field col s12">
                         <label for="newEmail">Nouvelle adresse E-mail</label>
                         <input type="email" id="newEmail" name="newEmail">
-                        <?= isset($emailErrors) ? $emailErrors['newEmail'] : '' ?>
+                        <p class="red-text"><?= $emailErrors['newEmail'] ?? '' ?></p>
                     </div>
                     <div class="input-field col s12">
                         <button type="submit" class="btn green">Changer l'adresse E-mail</button>
@@ -44,17 +43,16 @@
                     <div class="input-field col s12">
                         <label for="changePasswordEmail">Adresse E-mail</label>
                         <input type="email" id="changePasswordEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
-                        <?= isset($pwErrors) ? $pwErrors['email'] : '' ?>
                     </div>
                     <div class="input-field col s12">
                         <label for="changePasswordPassword">Mot de passe</label>
                         <input type="password" id="changePasswordPassword" name="password">
-                        <?= isset($pwErrors) ? $pwErrors['password'] : '' ?>
+                        <p class="red-text"><?= $pwErrors['password'] ?? '' ?></p>
                     </div>
                     <div class="input-field col s12">
                         <label for="newPassword">Nouveau mot de passe</label>
                         <input type="password" id="newPassword" name="newPassword">
-                        <?= isset($pwErrors) ? $pwErrors['newPassword'] : '' ?>
+                        <p class="red-text"><?= $pwErrors['newPassword'] ?? '' ?></p>
                     </div>
                     <div class="input-field col s12">
                         <label for="cNewPassword">Confirmer le mot de passe</label>
@@ -76,7 +74,6 @@
             <h5>Supprimer le compte</h5>
             <form method="POST" action="index.php?route=deleteAccount">
                 <div class="row">
-                    <?= isset($delAccountError) ? $delAccountError : '' ?>
                     <div class="input-field col s12">
                         <label for="deleteAccountEmail">Adresse E-mail</label>
                         <input type="email" id="deleteAccountEmail" name="email" value="<?= $user->getEmail() ?>" disabled>
@@ -84,6 +81,7 @@
                     <div class="input-field col s12">
                         <label for="deleteAccountPassword">Mot de passe</label>
                         <input type="password" id="deleteAccountPassword" name="password">
+                        <p class="red-text"><?= $delAccountError ?? '' ?></p>
                     </div>
                     <div class="input-field col s12">
                         <button type="submit" class="btn red">Supprimer mon compte</button>

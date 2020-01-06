@@ -62,7 +62,7 @@ class UserDAO extends DAO
         $result = $this->createQuery($sql, [$post->get('username')]);
         $isUsernameUnique = $result->fetchColumn();
         if ($isUsernameUnique) {
-            return '<p class="red-text">Ce pseudo existe déjà</p>';
+            return 'Ce pseudo existe déjà';
         }
     }
 
@@ -81,7 +81,7 @@ class UserDAO extends DAO
         $result = $this->createQuery($sql, [$post->get('email')]);
         $isEmailUnique = $result->fetchColumn();
         if ($isEmailUnique) {
-            return '<p class="red-text">Un compte avec cette addresse E-mail a déja été créé</p>';
+            return 'Un compte avec cette addresse E-mail a déja été créé';
         }
     }
 

@@ -141,7 +141,7 @@ class BackController extends Controller
             if ($this->reqMethod === 'POST') {
                 $errors = $this->validation->validate($post, 'User');
                 if ($post->get('password') !== $post->get('cPassword')) {
-                    $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+                    $errors['password'] = 'Les mots de passe ne sont pas identiques';
                 }
                 if (!$errors) {
                     $user = $this->userDAO->getUserFromEmail($post->get('email'));
@@ -193,10 +193,10 @@ class BackController extends Controller
              *  - Generer le lien dans le Mail
              */
             if ($userAtNewEmail) {
-                $errors['newEmail'] = '<p class="red-text">Un compte avec cette adresse Email a déja été créé</p>';
+                $errors['newEmail'] = 'Un compte avec cette adresse Email a déja été créé';
             }
             if (!$isPasswordValid) {
-                $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
+                $errors['password'] = 'Le mot de passe est incorrect';
             }
             if (!$errors) {
                 $user->generateToken();
@@ -259,10 +259,10 @@ class BackController extends Controller
             $cNewPassword = $post->get('cNewPassword');
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
             if (!$isPasswordValid) {
-                $errors['password'] = '<p class="red-text">Le mot de passe est incorrect</p>';
+                $errors['password'] = 'Le mot de passe est incorrect';
             }
             if ($newPassword !== $cNewPassword) {
-                $errors['newPassword'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+                $errors['newPassword'] = 'Les mots de passe ne sont pas identiques';
             }
             if (!$errors) {
                 $this->userDAO->changePassword($user->getId(), $newPassword);
@@ -291,7 +291,7 @@ class BackController extends Controller
             $password = $post->get('password');
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
             if (!$isPasswordValid) {
-                $wrongInputs = '<p class="red-text">Le mot de passe est incorrect</p>';
+                $wrongInputs = 'Le mot de passe est incorrect';
             }
             if (!$wrongInputs) {
                 $this->userDAO->deleteUser($user->getId());
@@ -314,7 +314,7 @@ class BackController extends Controller
         if ($this->isLoggedIn()) {
             $this->session->stop();
             $this->session->start();
-            $this->session->set('logout', 'A bientot');
+            $this->session->set('logout', 'À bientôt');
         }
         header('Location: index.php');
         exit();

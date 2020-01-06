@@ -1,14 +1,7 @@
-<p><?= $this->session->show('login_message') ?></p>
 <h3>Articles</h3>
 <div class="row">
     <a href="index.php?route=addArticle" class="btn waves-effect waves-light green"><i class="material-icons left">create</i>Ajouter un article</a>
 </div>
-<p class="indigo-text">
-    <?= $this->session->show('add_article') ?>
-    <?= $this->session->show('comment_action') ?>
-    <?= $this->session->show('user_action') ?>
-    <span class="red-text"><?= $this->session->show('article_access') ?></span>
-</p>
 <table class="responsive-table">
     <thead>
         <tr>

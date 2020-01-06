@@ -1,5 +1,14 @@
 <?php $this->title = 'Espace administration' ?>
 
+
+<div id="session" hidden>
+    <?= $this->session->show('login_message') ?>
+    <?= $this->session->show('add_article') ?>
+    <?= $this->session->show('comment_action') ?>
+    <?= $this->session->show('user_action') ?>
+    <?= $this->session->show('article_access') ?>
+</div>
+
 <div class="row">
     <div class="col s12 centered">
         <ul class="tabs blue-text">
