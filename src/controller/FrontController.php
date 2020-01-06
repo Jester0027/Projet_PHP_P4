@@ -129,20 +129,11 @@ class FrontController extends Controller
             }
             if (!$errors) {
                 $user = new User();
-
-                $user->register();
-
-                
-                $user->generateToken();
-                $createdAt = new DateTime();
-                $createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
-                $this->userDAO->register($post, $user->getToken(), $createdAt->format('Y-m-d H:i:s'));
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $user->getToken() . "&email=" . $post->get('email');
-                $mail = new Mail();
-                $mail->sendConfirmation($post, $link);
-
-
-                $this->session->set('register', 'Un email de confirmation vous a été envoyé');
+                if($user->register($post, $this->userDAO)) {
+                    $this->session->set('register', 'Un email de confirmation vous a été envoyé');
+                } else {
+                    $this->session->set('register', 'Une erreur est survenue, veuillez réessayer plus tard');
+                }
                 header('Location: index.php');
                 exit();
             }
