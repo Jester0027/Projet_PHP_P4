@@ -5,17 +5,17 @@
         <div class="input-field col s12">
             <label for="title">Titre</label>
             <input type="text" name="title" id="title" value="<?= isset($post) ? htmlspecialchars($post->get('title')) : '' ?>">
-            <?= isset($errors['title']) ? $errors['title'] : '' ?>
+            <p class="red-text"><?= isset($errors['title']) ? $errors['title'] : '' ?></p>
         </div>
         <div class="col s12">
             <label for="content">Contenu</label>
             <textarea class="tinymce" name="content" id="content"><?= isset($post) ? htmlspecialchars($post->get('content')) : '' ?></textarea>
-            <?= isset($errors['content']) ? $errors['content'] : '' ?>
+            <p class="red-text"><?= isset($errors['content']) ? $errors['content'] : '' ?></p>
         </div>
         <div class="input-field col s12">
             <label for="caption">Description</label>
             <textarea class="materialize-textarea" name="caption" id="caption"><?= isset($post) ? htmlspecialchars($post->get('caption')) : '' ?></textarea>
-            <?= isset($errors['caption']) ? $errors['caption'] : '' ?>
+            <p class="red-text"><?= isset($errors['caption']) ? $errors['caption'] : '' ?></p>
         </div>
     </div>
     <div class="row">

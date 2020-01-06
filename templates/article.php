@@ -1,5 +1,9 @@
 <?php $this->title = htmlspecialchars($article->getTitle()); ?>
 
+<div id="session" hidden>
+    <?= $this->session->show('comment') ?>
+</div>
+
 <div class="row">
     <div class="col m6 offset-m3 s12">
         <h1 class="center-align article-title"><?= htmlspecialchars($article->getTitle()); ?></h1>
@@ -22,11 +26,10 @@
 <div class="row">
     <h2 id="comments">Commentaires</h2>
     <form method="POST" action="./index.php?route=addComment&articleId=<?= $article->getId(); ?>">
-        <p class="red-text"><?= $this->session->show('comment') ?></p>
         <div class="input-field col s12">
             <label for="content">Ajouter un commentaire</label>
             <textarea class="materialize-textarea" name="content" id="content"><?= isset($post) ? $post->get('content') : '' ?></textarea>
-            <?= isset($errors) ? $errors['content'] : '' ?>
+            <p class="red-text"><?= isset($errors) ? $errors['content'] : '' ?></p>
         </div>
         <div class="input-field col s12 right-align">
             <button type="submit" class="btn waves-effect waves-light green" name="submit">Envoyer</button>

@@ -1,22 +1,19 @@
 <?php $this->title = 'S\'inscrire' ?>
 
-<p>
-    <?= $this->session->show('pw_no_match'); ?>
-</p>
 
 <form method="POST" action="./index.php?route=register">
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
             <label for="username">Pseudo</label>
             <input type="text" id="username" name="username" value="<?= isset($post) ? $post->get('username') : '' ?>">
-            <?= isset($errors['username']) ? $errors['username'] : '' ?>
+            <p class="red-text"><?= $errors['username'] ?? '' ?></p>
         </div>
     </div>
     <div class="row">
         <div class="input-field col m6 offset-m3 s12">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" value="<?= isset($post) ? $post->get('email') : '' ?>">
-            <?= isset($errors['email']) ? $errors['email'] : '' ?>
+            <p class="red-text"><?= $errors['email'] ?? '' ?></p>
         </div>
     </div>
 
@@ -24,7 +21,7 @@
         <div class="input-field col m6 offset-m3 s12">
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password">
-            <?= isset($errors['password']) ? $errors['password'] : '' ?>
+            <p class="red-text"><?= $errors['password'] ?? '' ?></p>
         </div>
     </div>
     <div class="row">

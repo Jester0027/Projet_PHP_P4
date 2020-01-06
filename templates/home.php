@@ -1,6 +1,6 @@
 <?php $this->title = 'Accueil' ?>
 
-<p>
+<div id="session" hidden>
     <?= $this->session->show('login_message') ?>
     <?= $this->session->show('register') ?>
     <?= $this->session->show('validation') ?>
@@ -9,7 +9,7 @@
     <?= $this->session->show('password_recovery') ?>
     <?= $this->session->show('pw_change') ?>
     <?= $this->session->show('profile_change') ?>
-</p>
+</div>
 
 <div class="row">
     <?php foreach ($articles as $article) : ?>

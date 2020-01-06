@@ -88,7 +88,7 @@ class FrontController extends Controller
                         'post' => $post
                     ]);
                 }
-                $this->session->set('login_message', 'content de vous revoir');
+                $this->session->set('login_message', 'Content de vous revoir');
                 $this->session->set('id', $result['result']['id']);
                 $this->session->set('role', $result['result']['name']);
                 $this->session->set('username', $post->get('username'));
@@ -125,7 +125,7 @@ class FrontController extends Controller
                 $errors['email'] = $this->userDAO->checkUserEmail($post);
             }
             if ($post->get('password') !== $post->get('cPassword')) {
-                $errors['password'] = '<p class="red-text">Les mots de passe ne sont pas identiques</p>';
+                $errors['password'] = 'Les mots de passe ne sont pas identiques';
             }
             if (!$errors) {
                 $user = new User();
