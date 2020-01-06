@@ -11,6 +11,49 @@ main {
 header {
     z-index: 10;
 }
+
+#header-image {
+    height: 300px;
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    margin-bottom: 300px;
+    box-shadow: 2px 2px 5px black;
+}
+
+#header-image>#cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
+}
+
+#header-image>img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+#header-image>h1 {
+    z-index: 2;
+    position: absolute;
+    color: white;
+    text-align: center;
+    width: 100%;
+    top: 100px;
+    text-shadow: 2px 2px 5px black;
+}
+
+.article-content {
+    margin-top: 310px;
+}
+
 .nav-wrapper>.container {
     height: inherit;
 }

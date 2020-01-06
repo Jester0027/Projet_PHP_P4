@@ -116,25 +116,17 @@ class User
     {
         $token = "";
         $tokenStr = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_.~';
-        
-        for($i = 0; $i < 70; $i++) {
-            $token .= $tokenStr[rand(0, strlen($tokenStr)-1)];
+
+        for ($i = 0; $i < 70; $i++) {
+            $token .= $tokenStr[rand(0, strlen($tokenStr) - 1)];
         }
 
         $this->token = $token;
     }
 
-    /**
-     * @return bool
-     */
+
     public function register(Parameter $post, UserDAO $userDAO)
     {
-        /**
-         * TODO: 
-         *  generer le token
-         *  enregistrer l'utilisateur
-         *  envoyer l'email
-         */
         try {
             $this->generateToken();
             $this->setCreatedAt(new DateTime());
@@ -144,19 +136,13 @@ class User
             $mail = new Mail();
             $mail->sendConfirmation($post, $link);
             return true;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
 
-    
     public function checkRegister(Parameter $post, UserDAO $userDAO, Validation $validation)
     {
-        /**
-         * TODO:
-         *  Validate User
-         *  Vérifier les inputs
-         */
         $errors = $validation->validate($post, 'User');
         if ($userDAO->checkUser($post)) {
             $errors['username'] = $userDAO->checkUser($post);
