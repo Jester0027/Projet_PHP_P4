@@ -3,6 +3,7 @@
 namespace BlogApp\src\model;
 
 use BlogApp\config\Parameter;
+use BlogApp\src\constraint\Validation;
 use BlogApp\src\DAO\UserDAO;
 use BlogApp\src\mailer\Mail;
 use DateTime;
@@ -149,12 +150,23 @@ class User
     }
 
     
-    public function checkRegister()
+    public function checkRegister(Parameter $post, UserDAO $userDAO, Validation $validation)
     {
         /**
          * TODO:
          *  Validate User
          *  Vérifier les inputs
          */
+        $errors = $validation->validate($post, 'User');
+        if ($userDAO->checkUser($post)) {
+            $errors['username'] = $userDAO->checkUser($post);
+        }
+        if ($userDAO->checkUserEmail($post)) {
+            $errors['email'] = $userDAO->checkUserEmail($post);
+        }
+        if ($post->get('password') !== $post->get('cPassword')) {
+            $errors['password'] = 'Les mots de passe ne sont pas identiques';
+        }
+        return $errors;
     }
 }
