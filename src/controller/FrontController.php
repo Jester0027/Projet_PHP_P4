@@ -64,6 +64,7 @@ class FrontController extends Controller
             exit();
         }
         $this->commentDAO->reportComment($get->get('commentId'));
+        $this->session->set('comment', 'Le commentaire a bien été signalé');
         header('Location: index.php?route=article&articleId=' . $get->get('articleId'));
     }
 
