@@ -2,6 +2,14 @@
 
 namespace BlogApp\src\model;
 
+use BlogApp\config\Parameter;
+use BlogApp\src\constraint\Validation;
+use BlogApp\src\DAO\UserDAO;
+use BlogApp\src\mailer\Mail;
+use DateTime;
+use DateTimeZone;
+use Exception;
+
 class User
 {
     private $id;
@@ -11,6 +19,7 @@ class User
     private $status;
     private $email;
     private $isVerified;
+    private $createdAt;
     private $token;
 
     public function getId()
@@ -83,6 +92,16 @@ class User
         $this->isVerified = $isVerified;
     }
 
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
     public function getToken()
     {
         return $this->token;
@@ -97,34 +116,43 @@ class User
     {
         $token = "";
         $tokenStr = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_.~';
-        
-        for($i = 0; $i < 70; $i++) {
-            $token .= $tokenStr[rand(0, strlen($tokenStr)-1)];
+
+        for ($i = 0; $i < 70; $i++) {
+            $token .= $tokenStr[rand(0, strlen($tokenStr) - 1)];
         }
 
         $this->token = $token;
     }
 
-    /**
-     * @return bool
-     */
-    public function register()
+
+    public function register(Parameter $post, UserDAO $userDAO)
     {
-        /**
-         * TODO: 
-         *  generer le token
-         *  enregistrer l'utilisateur
-         *  envoyer l'email
-         */
+        try {
+            $this->generateToken();
+            $this->setCreatedAt(new DateTime());
+            $this->createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
+            $userDAO->register($post, $this->getToken(), $this->getCreatedAt()->format('Y-m-d H:i:s'));
+            $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $this->getToken() . "&email=" . $post->get('email');
+            $mail = new Mail();
+            $mail->sendConfirmation($post, $link);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
-    
-    public function checkRegister()
+    public function checkRegister(Parameter $post, UserDAO $userDAO, Validation $validation)
     {
-        /**
-         * TODO:
-         *  Validate User
-         *  Vérifier les inputs
-         */
+        $errors = $validation->validate($post, 'User');
+        if ($userDAO->checkUser($post)) {
+            $errors['username'] = $userDAO->checkUser($post);
+        }
+        if ($userDAO->checkUserEmail($post)) {
+            $errors['email'] = $userDAO->checkUserEmail($post);
+        }
+        if ($post->get('password') !== $post->get('cPassword')) {
+            $errors['password'] = 'Les mots de passe ne sont pas identiques';
+        }
+        return $errors;
     }
 }

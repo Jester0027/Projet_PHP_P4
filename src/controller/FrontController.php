@@ -31,13 +31,13 @@ class FrontController extends Controller
 
     public function addComment(Session $session, Parameter $post, $articleId)
     {
-        if(!$this->isLoggedIn()) {
+        if (!$this->isLoggedIn()) {
             $this->session->set('login', 'Vous devez vous connecter pour effectuer cette action');
             header('Location: index.php?route=login');
             exit();
         }
         $errors = $this->validation->validate($post, 'Comment');
-        if(!$errors) {
+        if (!$errors) {
             $this->commentDAO->addComment($session, $post, $articleId);
             header('Location: index.php?route=article&articleId=' . $articleId);
             exit();
@@ -54,7 +54,7 @@ class FrontController extends Controller
 
     public function reportComment(Parameter $get)
     {
-        if(!$this->isLoggedIn()) {
+        if (!$this->isLoggedIn()) {
             $this->session->set('login', 'Vous devez vous connecter pour effectuer cette action');
             header('Location: index.php?route=login');
             exit();
@@ -69,32 +69,28 @@ class FrontController extends Controller
 
     public function login(Parameter $post)
     {
-        if($this->isLoggedIn()) {
+        if ($this->isLoggedIn()) {
             header('location: index.php');
             exit();
         }
         if ($this->reqMethod === 'POST') {
             $result = $this->userDAO->login($post);
-            if($result && $result['isPasswordValid']) {
+            if ($result && $result['isPasswordValid']) {
                 if (!$result['result']['is_verified']) {
                     $this->session->set('error_login', 'Votre compte n\'est pas validé');
-                    return $this->view->render('login', [
-                        'post' => $post
-                    ]);
+                    return $this->view->render('login', ['post' => $post]);
                 }
-                if($result['result']['status'] === '0') {
+                if ($result['result']['status'] === '0') {
                     $this->session->set('error_login', 'Votre compte a été banni');
-                    return $this->view->render('login', [
-                        'post' => $post
-                    ]);
+                    return $this->view->render('login', ['post' => $post]);
                 }
                 $this->session->set('login_message', 'Content de vous revoir');
                 $this->session->set('id', $result['result']['id']);
                 $this->session->set('role', $result['result']['name']);
                 $this->session->set('username', $post->get('username'));
                 $this->userDAO->resetToken($result['result']['id']);
-                
-                if($result['result']['name'] === 'admin') {
+
+                if ($result['result']['name'] === 'admin') {
                     header('location: index.php?route=admin');
                     exit();
                 }
@@ -107,42 +103,23 @@ class FrontController extends Controller
             ]);
         }
         return $this->view->render('login');
-        
     }
 
     public function register(Parameter $post)
     {
-        if($this->isLoggedIn()) {
+        if ($this->isLoggedIn()) {
             header('Location: index.php');
             exit();
         }
         if ($this->reqMethod === 'POST') {
-            $errors = $this->validation->validate($post, 'User');
-            if ($this->userDAO->checkUser($post)) {
-                $errors['username'] = $this->userDAO->checkUser($post);
-            }
-            if ($this->userDAO->checkUserEmail($post)) {
-                $errors['email'] = $this->userDAO->checkUserEmail($post);
-            }
-            if ($post->get('password') !== $post->get('cPassword')) {
-                $errors['password'] = 'Les mots de passe ne sont pas identiques';
-            }
+            $user = new User();
+            $errors = $user->checkRegister($post, $this->userDAO, $this->validation);
             if (!$errors) {
-                $user = new User();
-
-                $user->register();
-
-                
-                $user->generateToken();
-                $createdAt = new DateTime();
-                $createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
-                $this->userDAO->register($post, $user->getToken(), $createdAt->format('Y-m-d H:i:s'));
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $user->getToken() . "&email=" . $post->get('email');
-                $mail = new Mail();
-                $mail->sendConfirmation($post, $link);
-
-
-                $this->session->set('register', 'Un email de confirmation vous a été envoyé');
+                if ($user->register($post, $this->userDAO)) {
+                    $this->session->set('register', 'Un email de confirmation vous a été envoyé');
+                } else {
+                    $this->session->set('register', 'Une erreur est survenue, veuillez réessayer plus tard');
+                }
                 header('Location: index.php');
                 exit();
             }
@@ -156,13 +133,13 @@ class FrontController extends Controller
 
     public function lostPassword(Parameter $post)
     {
-        if($this->isLoggedIn()) {
+        if ($this->isLoggedIn()) {
             header('Location: index.php');
             exit();
         }
-        if($this->reqMethod === 'POST') {
+        if ($this->reqMethod === 'POST') {
             $user = $this->userDAO->getUserFromEmail($post->get('email'));
-            if($user) {
+            if ($user) {
                 $token = $user->generateToken();
                 $this->userDAO->addToken($user->getId(), $token);
                 $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=passwordRecovery&token=" . $token . "&email=" . $post->get('email');

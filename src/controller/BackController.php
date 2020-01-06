@@ -253,7 +253,6 @@ class BackController extends Controller
         $user = $this->userDAO->getUser($session->get('id'));
         if ($this->reqMethod === 'POST') {
             $errors = $this->validation->validate($post, 'User');
-            $email = $post->get('email');
             $password = $post->get('password');
             $newPassword = $post->get('newPassword');
             $cNewPassword = $post->get('cNewPassword');
