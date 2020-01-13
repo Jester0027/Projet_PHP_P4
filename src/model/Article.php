@@ -2,6 +2,8 @@
 
 namespace BlogApp\src\model;
 
+use BlogApp\src\helpers\Date;
+
 class Article
 {
     private $id;
@@ -64,7 +66,7 @@ class Article
 
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return Date::formatDateFR($this->createdAt);
     }
 
     public function setCreatedAt($createdAt)

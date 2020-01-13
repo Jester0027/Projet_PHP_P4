@@ -8,6 +8,7 @@ use BlogApp\src\model\View;
 use BlogApp\src\DAO\ArticleDAO;
 use BlogApp\src\DAO\CommentDAO;
 use BlogApp\src\DAO\UserDAO;
+use BlogApp\src\helpers\Date;
 
 abstract class Controller
 {
@@ -21,6 +22,7 @@ abstract class Controller
     protected $session;
     protected $validation;
     protected $reqMethod;
+    protected $date;
 
     public function __construct()
     {
@@ -34,6 +36,7 @@ abstract class Controller
         $this->session = $this->request->getSession();
         $this->validation = new Validation();
         $this->reqMethod = $_SERVER['REQUEST_METHOD'];
+        $this->date = new Date();
     }
 
     protected function isLoggedIn()

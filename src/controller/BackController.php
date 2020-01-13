@@ -67,8 +67,12 @@ class BackController extends Controller
         if ($this->reqMethod === 'POST') {
             $errors = $this->validation->validate($post, 'Article');
             if (!$errors) {
-                $this->articleDAO->addArticle($post, $session);
-                $this->session->set('add_article', 'Votre article a bien été ajouté');
+                $createdAt = $this->date->getCurrentDate();
+                if($this->articleDAO->addArticle($post, $session, $createdAt)) {
+                    $this->session->set('add_article', 'Votre article a bien été ajouté');
+                } else {
+                    $this->session->set('add_article', 'Une erreur est survenu lors de l\'ajout de l\'article');
+                }
                 header('Location: index.php?route=admin');
                 exit();
             }
@@ -186,7 +190,7 @@ class BackController extends Controller
             $newEmail = $post->get('newEmail');
             $userAtNewEmail = $this->userDAO->getUserFromEmail($newEmail);
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-            
+
             if ($userAtNewEmail) {
                 $errors['newEmail'] = 'Un compte avec cette adresse Email a déja été créé';
             }

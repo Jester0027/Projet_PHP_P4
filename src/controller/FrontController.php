@@ -6,8 +6,6 @@ use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\mailer\Mail;
 use BlogApp\src\model\User;
-use DateTime;
-use DateTimeZone;
 
 class FrontController extends Controller
 {
