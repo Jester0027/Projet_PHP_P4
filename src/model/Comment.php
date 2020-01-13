@@ -2,6 +2,8 @@
 
 namespace BlogApp\src\model;
 
+use BlogApp\src\helpers\Date;
+
 class Comment
 {
     private $id;
@@ -63,7 +65,7 @@ class Comment
 
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return Date::formatDateTimeFR($this->createdAt);
     }
 
     public function setCreatedAt($createdAt)

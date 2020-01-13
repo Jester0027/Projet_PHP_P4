@@ -88,6 +88,10 @@ h2 {
     z-index: 0;
 }
 
+.commentAuthor {
+    font-weight: bold;
+}
+
 .loader {
     position: absolute;
     margin: auto;

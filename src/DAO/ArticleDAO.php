@@ -5,6 +5,8 @@ namespace BlogApp\src\DAO;
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\model\Article;
+use DateTime;
+use Exception;
 
 class ArticleDAO extends DAO
 {
@@ -41,15 +43,21 @@ class ArticleDAO extends DAO
         return $this->buildObject($article);
     }
 
-    public function addArticle(Parameter $post, Session $session)
+    public function addArticle(Parameter $post, Session $session, $createdAt)
     {
-        $sql = 'INSERT INTO article(title, user_id, content, caption, created_at) VALUE(?, ?, ?, ?, NOW())';
-        $this->createQuery($sql, [
-            $post->get('title'),
-            $session->get('id'),
-            $post->get('content'),
-            $post->get('caption')
-        ]);
+        try {
+            $sql = 'INSERT INTO article(title, user_id, content, caption, created_at) VALUE(?, ?, ?, ?, ?)';
+            $this->createQuery($sql, [
+                $post->get('title'),
+                $session->get('id'),
+                $post->get('content'),
+                $post->get('caption'),
+                $createdAt
+            ]);
+            return true;
+        } catch(Exception $e) {
+            return false;
+        }
     }
 
     public function editArticle(Parameter $post, $articleId)
