@@ -36,7 +36,8 @@ class FrontController extends Controller
         }
         $errors = $this->validation->validate($post, 'Comment');
         if (!$errors) {
-            $this->commentDAO->addComment($session, $post, $articleId);
+            $createdAt = $this->date->getCurrentDate();
+            $this->commentDAO->addComment($session, $post, $articleId, $createdAt);
             header('Location: index.php?route=article&articleId=' . $articleId);
             exit();
         }
