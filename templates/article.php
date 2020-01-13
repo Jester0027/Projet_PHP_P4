@@ -22,7 +22,7 @@
             <p>Le : <?= htmlspecialchars($article->getCreatedAt()); ?></p>
         </div>
     </div>
-    
+
     <div class="row">
         <h2 id="comments">Commentaires</h2>
         <form method="POST" action="./index.php?route=addComment&articleId=<?= $article->getId(); ?>">
@@ -35,10 +35,10 @@
                 <button type="submit" class="btn waves-effect waves-light green" name="submit">Envoyer</button>
             </div>
         </form>
-    
-        <?php foreach($comments as $comment) : ?>
+
+        <?php foreach ($comments as $comment) : ?>
             <div class="row">
-                <h6><?= htmlspecialchars($comment->getAuthor()); ?> le <?= htmlspecialchars($comment->getCreatedAt()); ?></h6>
+                <h6><span class="commentAuthor"><?= htmlspecialchars($comment->getAuthor()); ?></span>, le <?= htmlspecialchars($comment->getCreatedAt()); ?></h6>
                 <p><?= htmlspecialchars($comment->getContent()); ?></p>
                 <a class="red-text" href="index.php?route=reportComment&commentId=<?= $comment->getId() ?>&articleId=<?= $article->getId() ?>">Signaler ce commentaire</a>
             </div>
