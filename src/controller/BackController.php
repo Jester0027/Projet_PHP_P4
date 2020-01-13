@@ -186,12 +186,7 @@ class BackController extends Controller
             $newEmail = $post->get('newEmail');
             $userAtNewEmail = $this->userDAO->getUserFromEmail($newEmail);
             $isPasswordValid = $this->userDAO->checkPassword($user->getId(), $password);
-
-            /**
-             * TODO:
-             *  - retirer les balises HTML du controller et les mettre sur les vues
-             *  - Generer le lien dans le Mail
-             */
+            
             if ($userAtNewEmail) {
                 $errors['newEmail'] = 'Un compte avec cette adresse Email a déja été créé';
             }
