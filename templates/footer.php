@@ -40,7 +40,7 @@
     <div class="footer-copyright indigo darken-4">
         <div class="container">
             © 2019 Jean Forteroche
-            <a href="./" class="right white-text text-lighten-4">Privacy Policy</a>
+            <a href="./" class="right white-text text-lighten-4">Mentions légales</a>
         </div>
     </div>
 </footer>

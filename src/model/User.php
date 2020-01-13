@@ -131,11 +131,20 @@ class User
             $this->generateToken();
             $this->setCreatedAt(new DateTime());
             $this->createdAt->setTimezone(new DateTimeZone('Europe/Paris'));
-            $userDAO->register($post, $this->getToken(), $this->getCreatedAt()->format('Y-m-d H:i:s'));
-            $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $this->getToken() . "&email=" . $post->get('email');
-            $mail = new Mail();
-            $mail->sendConfirmation($post, $link);
-            return true;
+            if($userDAO->register($post, $this->getToken(), $this->getCreatedAt()->format('Y-m-d H:i:s'))) {
+                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirm&token=" . $this->getToken() . "&email=" . $post->get('email');
+                $mail = new Mail();
+                $mail->sendConfirmation($post, $link);
+                /**
+                 * TODO:
+                 *  sendConfirmation($post, [
+                 *      'parametre get' => 'valeur'
+                 *  ]);
+                 */
+                return true;
+            } else {
+                // Erreur
+            }
         } catch (Exception $e) {
             return false;
         }

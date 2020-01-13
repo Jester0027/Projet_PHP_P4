@@ -6,7 +6,7 @@
 
 <div id="header-image">
     <div id="cover"></div>
-    <img src="./public/images/Alaska-header.jpg" alt="Alaska">
+    <img src="images/Alaska-header.jpg" alt="Alaska">
     <h1 class="article-title"><?= htmlspecialchars($article->getTitle()); ?></h1>
 </div>
 

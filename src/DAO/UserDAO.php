@@ -4,6 +4,7 @@ namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
 use BlogApp\src\model\User;
+use Exception;
 
 class UserDAO extends DAO
 {
@@ -93,15 +94,20 @@ class UserDAO extends DAO
 
     public function register(Parameter $post, $token, $createdAt)
     {
-        $sql = 'INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(?, ?, 1, 1, ?, ?, ?)';
-        // INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(:username,...)
-        $this->createQuery($sql, [
-            $post->get('username'),
-            password_hash($post->get('password'), PASSWORD_BCRYPT),
-            $post->get('email'),
-            $token,
-            $createdAt
-        ]);
+        try {
+            $sql = 'INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(?, ?, 1, 1, ?, ?, ?)';
+            // INSERT INTO user(username, password, role_id, status, email, token, created_at) VALUES(:username,...)
+            $this->createQuery($sql, [
+                $post->get('username'),
+                password_hash($post->get('password'), PASSWORD_BCRYPT),
+                $post->get('email'),
+                $token,
+                $createdAt
+            ]);
+            return true;
+        } catch(Exception $e) {
+            throw new Exception("Une erreur est survenue lors de l'inscription : " . $e);
+        }
     }
 
     public function addToken($userId, $token)

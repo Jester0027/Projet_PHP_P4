@@ -13,7 +13,7 @@
             <?= isset($errors['content']) ? $errors['content'] : '' ?>
         </div>
         <div class="input-field col s12">
-            <label for="caption">Description</label>
+            <label for="caption">Extrait</label>
             <textarea class="materialize-textarea" name="caption" id="caption"><?= isset($errors) ? htmlspecialchars($post->get('caption')) : htmlspecialchars($article->getCaption()) ?></textarea>
             <?= isset($errors['caption']) ? $errors['caption'] : '' ?>
         </div>
