@@ -11,28 +11,36 @@
     <?= $this->session->show('profile_change') ?>
 </div>
 
-<div class="row">
-    <?php foreach ($articles as $article) : ?>
-        <a href="./index.php?route=article&articleId=<?= $article->getId(); ?>">
-            <div class="card indigo lighten-1 white-text z-depth-3">
-                <div class="card-content">
-                    <strong class="card-title"><?= htmlspecialchars($article->getTitle()); ?></strong>
-                    <p><?= $article->getCaption(); ?></p>
-                </div>
-                <div class="card-action">
-                    Par : <?= htmlspecialchars($article->getAuthor()); ?>, le <?= htmlspecialchars($article->getCreatedAt()); ?>
-                </div>
-            </div>
-        </a>
-    <?php endforeach; ?>
+<div id="header-image">
+    <div id="cover"></div>
+    <img src="images/Alaska-background.png" alt="Montagnes d'Alaska">
+    <h1 class="header-title">Billet simple pour l'Alaska</h1>
+</div>
+
+<div class="content">
     <div class="row">
-        <ul class="pagination center-align">
-            <li class="<?= $page <= 1 ? 'disabled' : 'waves-effect' ?>">
-                <a <?php if ($page > 1) { ?>href="/index.php?page=<?= $page - 1 ?>" <?php } ?>><i class="material-icons">chevron_left</i></a>
-            </li>
-            <li  class="<?= $page >= $count ? 'disabled' : 'waves-effect' ?>">
-                <a <?php if ($page < $count) { ?>href="/index.php?page=<?= $page + 1 ?>" <?php } ?>><i class="material-icons">chevron_right</i></a>
-            </li>
-        </ul>
+        <?php foreach ($articles as $article) : ?>
+            <a href="./index.php?route=article&articleId=<?= $article->getId(); ?>">
+                <div class="card indigo lighten-1 white-text z-depth-3">
+                    <div class="card-content">
+                        <strong class="card-title"><?= htmlspecialchars($article->getTitle()); ?></strong>
+                        <p><?= $article->getCaption(); ?></p>
+                    </div>
+                    <div class="card-action">
+                        Par : <?= htmlspecialchars($article->getAuthor()); ?>, le <?= htmlspecialchars($article->getCreatedAt()); ?>
+                    </div>
+                </div>
+            </a>
+        <?php endforeach; ?>
+        <div class="row">
+            <ul class="pagination center-align">
+                <li class="<?= $page <= 1 ? 'disabled' : 'waves-effect' ?>">
+                    <a <?php if ($page > 1) { ?>href="/index.php?page=<?= $page - 1 ?>" <?php } ?>><i class="material-icons">chevron_left</i></a>
+                </li>
+                <li  class="<?= $page >= $count ? 'disabled' : 'waves-effect' ?>">
+                    <a <?php if ($page < $count) { ?>href="/index.php?page=<?= $page + 1 ?>" <?php } ?>><i class="material-icons">chevron_right</i></a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>

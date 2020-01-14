@@ -7,10 +7,10 @@
 <div id="header-image">
     <div id="cover"></div>
     <img src="images/Alaska-header.jpg" alt="Alaska">
-    <h1 class="article-title"><?= htmlspecialchars($article->getTitle()); ?></h1>
+    <h1 class="header-title"><?= htmlspecialchars($article->getTitle()); ?></h1>
 </div>
 
-<div class="article-content">
+<div class="content">
     <div class="row">
         <div class="row">
             <div class="col s12">

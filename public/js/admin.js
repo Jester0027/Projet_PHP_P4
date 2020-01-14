@@ -3,10 +3,6 @@ const preloader = '<div class="preloader-wrapper big active loader"><div class="
 $(function () {
 
     const getData = (route, id, action = '') => {
-        /**
-         * Route initialization
-         * 
-         */
         if(!action) {
             $('#selected')[0].innerText = route;
             $('#page')[0].innerText = 1;
