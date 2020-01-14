@@ -36,17 +36,3 @@
         <?php } ?>
     </tbody>
 </table>
-
-<div class="pageNumber" hidden><?= $page ?></div>
-
-<div class="row">
-    <ul class="pagination center-align">
-        <?= $page ?>
-        <li class="<?= $page <= 1 ? 'disabled' : 'waves-effect' ?>">
-            <a <?php if ($page > 1) { ?>href="/index.php?route=admin&articlesPage=<?= $page - 1 ?>" <?php } ?>><i class="material-icons">chevron_left</i></a>
-        </li>
-        <li class="<?= $page >= $count ? 'disabled' : 'waves-effect' ?>">
-            <a <?php if ($page < $count) { ?>href="/index.php?route=admin&articlesPage=<?= $page + 1 ?>" <?php } ?>><i class="material-icons">chevron_right</i></a>
-        </li>
-    </ul>
-</div>
