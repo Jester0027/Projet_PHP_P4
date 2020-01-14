@@ -15,16 +15,16 @@ class BackController extends Controller
             header('Location: index.php');
             exit();
         }
-        $limit = 5;
+        $limit = 10;
 
         $articlesCount = $this->articleDAO->countArticles();
-        $articlesPageCount = (int)ceil($articlesCount / $limit);
+        $articlesPageCount = (int)ceil($articlesCount / $limit) ?? 1;
 
         $usersCount = $this->userDAO->countUsers();
-        $usersPageCount = (int)ceil($usersCount / $limit);
+        $usersPageCount = (int)ceil($usersCount / $limit) ?? 1;
 
         $commentsCount = $this->commentDAO->countReportedComments();
-        $commentsPageCount = (int)ceil($commentsCount / $limit);
+        $commentsPageCount = ((int)ceil($commentsCount / $limit)) ?? 1;
 
         return $this->view->render('admin', [
             'articlesPageCount' => $articlesPageCount,
@@ -40,7 +40,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 5;
+        $limit = 10;
         $articles = $this->articleDAO->getArticles($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminArticles', [
             'articles' => $articles,
@@ -55,7 +55,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 5;
+        $limit = 10;
         $users = $this->userDAO->getUsers($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminUsers', [
             'users' => $users,
@@ -70,7 +70,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 5;
+        $limit = 10;
         $reportedComments = $this->commentDAO->getReportedComments($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminReports', [
             'reportedComments' => $reportedComments,

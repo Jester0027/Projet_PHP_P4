@@ -22,12 +22,14 @@
 <div hidden id="selected"></div>
 <div hidden id="_adminArticles"><?= $articlesPageCount ?></div>
 <div hidden id="_adminUsers"><?= $usersPageCount ?></div>
-<div hidden id="_adminReports"><?= $reportsPageCount ?></div>
+<div hidden id="_adminReports"><?= $commentsPageCount ?></div>
 
-<div hidden id="page"></div>
-<div hidden id="pages"></div>
 <div class="row" id="content"></div>
-
+<div class="center-align">
+    <p>
+        <span id="page"></span>/<span id="pages"></span>
+    </p>
+</div>
 <div class="row">
     <ul class="pagination center-align">
         <li class="waves-effect" id="__prev">
