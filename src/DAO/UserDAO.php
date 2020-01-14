@@ -3,6 +3,7 @@
 namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
+use BlogApp\src\helpers\Pagination;
 use BlogApp\src\model\User;
 use Exception;
 
@@ -19,9 +20,22 @@ class UserDAO extends DAO
         return $user;
     }
 
-    public function getUsers()
+    public function countUsers()
     {
-        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1';
+        $sql = 'SELECT COUNT(id) FROM user';
+        $count = $this->createQuery($sql)->fetchColumn();
+        return $count;
+    }
+
+    public function getUsers($page, $limit = null)
+    {
+        $pagination = '';
+        if($limit) {
+            $count = $this->countUsers();
+            $pagination = Pagination::createPagination($page, $limit, $count);
+        }
+
+        $sql = 'SELECT user.id, user.username, role.name AS role, user.status, user.email FROM user INNER JOIN role ON user.role_id = role.id WHERE user.is_verified = 1 ' . $pagination;
         $result = $this->createQuery($sql);
         $users = [];
         foreach ($result as $row) {

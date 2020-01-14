@@ -19,8 +19,24 @@
     </div>
 </div>
 
-<div class="row" id="articles"></div>
+<div hidden id="selected"></div>
+<div hidden id="_adminArticles"><?= $articlesPageCount ?></div>
+<div hidden id="_adminUsers"><?= $usersPageCount ?></div>
+<div hidden id="_adminReports"><?= $reportsPageCount ?></div>
 
-<div class="row" id="users"></div>
+<div hidden id="page"></div>
+<div hidden id="pages"></div>
+<div class="row" id="content"></div>
 
-<div class="row" id="reports"></div>
+<div class="row">
+    <ul class="pagination center-align">
+        <li class="waves-effect" id="__prev">
+            <a><i class="material-icons">chevron_left</i></a>
+        </li>
+        <li class="waves-effect" id="__next">
+            <a><i class="material-icons">chevron_right</i></a>
+        </li>
+    </ul>
+</div>
+
+

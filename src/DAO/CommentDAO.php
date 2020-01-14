@@ -27,6 +27,13 @@ class CommentDAO extends DAO
         return $count;
     }
 
+    public function countReportedComments()
+    {
+        $sql = 'SELECT COUNT(id) FROM comment WHERE is_reported = 1';
+        $count = $this->createQuery($sql)->fetchColumn();
+        return $count;
+    }
+
     public function getCommentsFromArticleId($articleId, $page = 1, $limit = null)
     {
         $count = $this->countCommentsFromArticle($articleId);
@@ -53,9 +60,15 @@ class CommentDAO extends DAO
         ]);
     }
 
-    public function getReportedComments()
+    public function getReportedComments($page, $limit = null)
     {
-        $sql = 'SELECT comment.id, user.username, comment.content, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.is_reported = ?';
+        $pagination = '';
+        if($limit) {
+            $count = $this->countReportedComments();
+            $pagination = Pagination::createPagination($page, $limit, $count);
+        }
+
+        $sql = 'SELECT comment.id, user.username, comment.content, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.is_reported = ? ' . $pagination;
         $result = $this->createQuery($sql, ['1']);
         $comments = [];
         foreach ($result as $row) {

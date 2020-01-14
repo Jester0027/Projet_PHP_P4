@@ -15,7 +15,22 @@ class BackController extends Controller
             header('Location: index.php');
             exit();
         }
-        return $this->view->render('admin', [], ['admin'], ['https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js']);
+        $limit = 5;
+
+        $articlesCount = $this->articleDAO->countArticles();
+        $articlesPageCount = (int)ceil($articlesCount / $limit);
+
+        $usersCount = $this->userDAO->countUsers();
+        $usersPageCount = (int)ceil($usersCount / $limit);
+
+        $commentsCount = $this->commentDAO->countReportedComments();
+        $commentsPageCount = (int)ceil($commentsCount / $limit);
+
+        return $this->view->render('admin', [
+            'articlesPageCount' => $articlesPageCount,
+            'usersPageCount' => $usersPageCount,
+            'commentsPageCount' => $commentsPageCount
+        ], ['admin'], ['https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js']);
     }
 
     public function _adminArticles()
@@ -25,9 +40,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $articles = $this->articleDAO->getArticles();
+        $limit = 5;
+        $articles = $this->articleDAO->getArticles($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminArticles', [
-            'articles' => $articles
+            'articles' => $articles,
+            'page' => $this->get->get('page')
         ]);
     }
 
@@ -38,9 +55,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $users = $this->userDAO->getUsers();
+        $limit = 5;
+        $users = $this->userDAO->getUsers($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminUsers', [
-            'users' => $users
+            'users' => $users,
+            'page' => $this->get->get('page')
         ]);
     }
 
@@ -51,9 +70,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $reportedComments = $this->commentDAO->getReportedComments();
+        $limit = 5;
+        $reportedComments = $this->commentDAO->getReportedComments($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminReports', [
-            'reportedComments' => $reportedComments
+            'reportedComments' => $reportedComments,
+            'page' => $this->get->get('page')
         ]);
     }
 
