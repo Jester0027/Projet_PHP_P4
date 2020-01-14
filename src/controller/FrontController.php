@@ -57,13 +57,22 @@ class FrontController extends Controller
             header('Location: index.php?route=article&articleId=' . $articleId);
             exit();
         }
+        $page = 1;
+        $limit = 10;
         $article = $this->articleDAO->getArticle($articleId);
-        $comments = $this->commentDAO->getCommentsFromArticleId($articleId);
+        $comments = $this->commentDAO->getCommentsFromArticleId($articleId, $page, $limit);
+        $count = $this->commentDAO->countCommentsFromArticle($articleId);
+        $pageCount = (int)ceil($count / $limit);
+        $pageLink = 'index.php?route=article&articleId=' . $article->getId();
         return $this->view->render('article', [
             'post' => $post,
             'errors' => $errors,
             'article' => $article,
-            'comments' => $comments
+            'comments' => $comments,
+            'page' => $page,
+            'count' => $count,
+            'pageCount' => $pageCount,
+            'pageLink' => $pageLink
         ]);
     }
 
