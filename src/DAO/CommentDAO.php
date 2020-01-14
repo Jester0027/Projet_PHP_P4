@@ -4,7 +4,9 @@ namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
+use BlogApp\src\helpers\Pagination;
 use BlogApp\src\model\Comment;
+use Exception;
 
 class CommentDAO extends DAO
 {
@@ -18,9 +20,18 @@ class CommentDAO extends DAO
         return $comment;
     }
 
-    public function getCommentsFromArticleId($articleId)
+    public function countCommentsFromArticle($articleId)
     {
-        $sql = 'SELECT comment.id, user.username, comment.content, comment.is_reported, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE article_id = ? AND comment.is_reported IN(?, ?) ORDER BY comment.created_at DESC';
+        $sql = 'SELECT COUNT(id) FROM comment WHERE article_id = ?';
+        $count = $this->createQuery($sql, [$articleId])->fetchColumn();
+        return $count;
+    }
+
+    public function getCommentsFromArticleId($articleId, $page = 1, $limit = null)
+    {
+        $count = $this->countCommentsFromArticle($articleId);
+        $pagination = Pagination::createPagination($page, $limit, $count);
+        $sql = 'SELECT comment.id, user.username, comment.content, comment.is_reported, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE article_id = ? AND comment.is_reported IN(?, ?) ORDER BY comment.created_at DESC ' . $pagination;
         $result = $this->createQuery($sql, [$articleId, 0, 2]);
         $comments = [];
         foreach ($result as $row) {

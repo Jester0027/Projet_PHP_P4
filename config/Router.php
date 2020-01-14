@@ -28,7 +28,7 @@ class Router
         try {
             if (isset($route)) {
                 if ($route === 'article') {
-                    $this->frontController->getArticle($this->request->getGet()->get('articleId'));
+                    $this->frontController->getArticle($this->request->getGet()->get('articleId'), $this->request->getGet()->get('commentsPage'));
                 } else if ($route === 'addComment') {
                     $this->frontController->addComment($this->request->getSession(), $this->request->getPost(), $this->request->getGet()->get('articleId'));
                 } else if ($route === 'addArticle') {
