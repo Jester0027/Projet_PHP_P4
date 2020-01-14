@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 
 abstract class Mailer
 {
-    protected function sendEmail($from, $to, $subject, $content, $name ='')
+    protected function sendEmail($from, $to, $subject, $content, $name = '')
     {
         $mail = new PHPMailer(true);
         try {
@@ -18,9 +18,9 @@ abstract class Mailer
             $mail->isHTML(true);
             $mail->Subject = $subject;
             $mail->Body = $content;
-    
+
             return $mail->send();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $e;
         }
     }
@@ -41,5 +41,21 @@ abstract class Mailer
             return ob_get_clean();
         }
         header('Location: index.php?route=notFound');
+    }
+
+    protected function generateLink(array $params)
+    {
+        if (isset($_SERVER['REDIRECT_URL'])) {
+            $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?";
+        } else {
+            $link = "http://" . $_SERVER['HTTP_HOST'] . "?";
+        }
+
+        foreach ($params as $param => $value) {
+            $link .= $param . "=" . $value . "&";
+        }
+
+        $link = rtrim($link, '&');
+        return $link;
     }
 }

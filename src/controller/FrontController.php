@@ -140,11 +140,15 @@ class FrontController extends Controller
         if ($this->reqMethod === 'POST') {
             $user = $this->userDAO->getUserFromEmail($post->get('email'));
             if ($user) {
-                $token = $user->generateToken();
-                $this->userDAO->addToken($user->getId(), $token);
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=passwordRecovery&token=" . $token . "&email=" . $post->get('email');
+                $user->generateToken();
+                $this->userDAO->addToken($user->getId(), $user->getToken());
+                $params = [
+                    "route" => "passwordRecovery",
+                    "token" => $user->getToken(),
+                    "email" => $post->get('email')
+                ];
                 $mail = new Mail();
-                $mail->sendPasswordRecovery($post, $link);
+                $mail->sendPasswordRecovery($post, $params);
             }
             $this->session->set('password_recovery', 'Un email a été envoyé a l\'adresse indiquée');
             header('Location: index.php');

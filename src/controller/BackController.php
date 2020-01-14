@@ -199,9 +199,14 @@ class BackController extends Controller
             }
             if (!$errors) {
                 $user->generateToken();
-                $link = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REDIRECT_URL'] . "?route=confirmChangeEmail&token=" . $user->getToken() . "&email=" . $user->getEmail() . "&newEmail=" . $newEmail;
+                $params = [
+                    "route" => "confirmChangeEmail",
+                    "token" => $user->getToken(),
+                    "email" => $user->getEmail(),
+                    "newEmail" => $newEmail
+                ];
                 $mail = new Mail();
-                if ($mail->sendEmailChange($post, $link, $user)) {
+                if ($mail->sendEmailChange($post, $params, $user)) {
                     $this->userDAO->addToken($session->get('id'), $user->getToken());
                     $this->session->set('profile_change', 'Un email de confirmation vous a été envoyé');
                 } else {

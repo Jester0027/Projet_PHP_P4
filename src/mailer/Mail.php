@@ -8,11 +8,12 @@ use BlogApp\src\model\User;
 
 class Mail extends Mailer implements IMail
 {
-    public function sendConfirmation(Parameter $post, $link)
+    public function sendConfirmation(Parameter $post, $params)
     {
         $from = self::ADDRESS;
         $to = $post->get('email');
         $subject = "Vérification d'authentification";
+        $link = $this->generateLink($params);
         $content = $this->render('confirm', [
             'post' => $post,
             'link' => $link
@@ -21,11 +22,12 @@ class Mail extends Mailer implements IMail
         return $this->sendEmail($from, $to, $subject, $content, self::NAME);
     }
 
-    public function sendPasswordRecovery(Parameter $post, $link)
+    public function sendPasswordRecovery(Parameter $post, $params)
     {
         $from = self::ADDRESS;
         $to = $post->get('email');
         $subject = "Récupération de mot de passe";
+        $link = $this->generateLink($params);
         $content = $this->render('password_recovery', [
             'post' => $post,
             'link' => $link
@@ -34,11 +36,12 @@ class Mail extends Mailer implements IMail
         return $this->sendEmail($from, $to, $subject, $content, self::NAME);
     }
 
-    public function sendEmailChange(parameter $post, $link, User $user)
+    public function sendEmailChange(parameter $post, $params, User $user)
     {
         $from = self::ADDRESS;
         $to = $post->get('newEmail');
         $subject = "Changement d'adresse Email";
+        $link = $this->generateLink($params);
         $content = $this->render('email_change', [
             'post' => $post,
             'link' => $link,
