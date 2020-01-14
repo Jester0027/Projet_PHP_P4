@@ -25,4 +25,14 @@
             </div>
         </a>
     <?php endforeach; ?>
+    <div class="row">
+        <ul class="pagination center-align">
+            <li class="<?= $page <= 1 ? 'disabled' : 'waves-effect' ?>">
+                <a <?php if ($page > 1) { ?>href="/index.php?page=<?= $page - 1 ?>" <?php } ?>><i class="material-icons">chevron_left</i></a>
+            </li>
+            <li  class="<?= $page >= $count ? 'disabled' : 'waves-effect' ?>">
+                <a <?php if ($page < $count) { ?>href="/index.php?page=<?= $page + 1 ?>" <?php } ?>><i class="material-icons">chevron_right</i></a>
+            </li>
+        </ul>
+    </div>
 </div>

@@ -83,7 +83,7 @@ class Router
                     $this->errorController->get404();
                 }
             } else {
-                $this->frontController->getHome();
+                $this->frontController->getHome($this->request->getGet()->get('page'));
             }
         } catch (Exception $e) {
             $this->errorController->get500($e);

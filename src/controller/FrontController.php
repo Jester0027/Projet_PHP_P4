@@ -9,11 +9,15 @@ use BlogApp\src\model\User;
 
 class FrontController extends Controller
 {
-    public function getHome()
+    public function getHome($page)
     {
-        $articles = $this->articleDAO->getArticles();
+        $limit = 5;
+        $articles = $this->articleDAO->getArticles($page, $limit);
+        $count = $this->articleDAO->countArticles();
         return $this->view->render('home', [
-            'articles' => $articles
+            'articles' => $articles,
+            'page' => $page ?? 1,
+            'count' => (int)ceil($count / $limit)
         ]);
     }
 
