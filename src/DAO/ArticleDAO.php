@@ -56,6 +56,39 @@ class ArticleDAO extends DAO
         return $this->buildObject($article);
     }
 
+    public function getIdFromFirstArticle()
+    {
+        $sql = 'SELECT MIN(id) as id FROM article';
+        $result = $this->createQuery($sql);
+        $article = $result->fetch();
+        $result->closeCursor();
+        return $article['id'];
+    }
+
+    public function getPrevArticle($id)
+    {
+        $sql = "SELECT * FROM article WHERE id < :id ORDER BY id DESC LIMIT 0,1";
+        $result = $this->createQuery($sql, ['id' => $id]);
+        $article = $result->fetch();
+        $result->closeCursor();
+        $article = $this->buildObject($article);
+        if($article->getId()) 
+            return $article;
+        return false;
+    }
+
+    public function getNextArticle($id)
+    {
+        $sql = "SELECT * FROM article WHERE id > :id LIMIT 0,1";
+        $result = $this->createQuery($sql, ['id' => $id]);
+        $article = $result->fetch();
+        $result->closeCursor();
+        $article = $this->buildObject($article);
+        if($article->getId()) 
+            return $article;
+        return false;
+    }
+
     public function addArticle(Parameter $post, Session $session, $createdAt)
     {
         try {
