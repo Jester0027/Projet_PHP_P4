@@ -9,21 +9,42 @@ use BlogApp\src\model\User;
 
 class FrontController extends Controller
 {
-    public function getHome()
+    public function getHome($page)
     {
-        $articles = $this->articleDAO->getArticles();
+        $page = $page ? (int)$page : 1;
+        $limit = 5;
+        $articles = $this->articleDAO->getArticles($page, $limit);
+        $count = $this->articleDAO->countArticles();
+        $count = (int)ceil($count / $limit);
+        $firstArticleId = $this->articleDAO->getIdFromFirstArticle();
         return $this->view->render('home', [
-            'articles' => $articles
+            'articles' => $articles,
+            'page' => $page,
+            'count' => $count,
+            'firstId' => $firstArticleId
         ]);
     }
 
-    public function getArticle($articleId)
+    public function getArticle($articleId, $page)
     {
+        $page = $page ? (int)$page : 1;
+        $limit = 10;
         $article = $this->articleDAO->getArticle($articleId);
-        $comments = $this->commentDAO->getCommentsFromArticleId($articleId);
+        $comments = $this->commentDAO->getCommentsFromArticleId($articleId, $page, $limit);
+        $count = $this->commentDAO->countCommentsFromArticle($articleId);
+        $pageCount = (int)ceil($count / $limit);
+        $pageLink = 'index.php?route=article&articleId=' . $article->getId();
+        $prevArticle = $this->articleDAO->getPrevArticle($articleId);
+        $nextArticle = $this->articleDAO->getNextArticle($articleId);
         return $this->view->render('article', [
             'article' => $article,
-            'comments' => $comments
+            'comments' => $comments,
+            'page' => $page,
+            'count' => $count,
+            'pageCount' => $pageCount,
+            'pageLink' => $pageLink,
+            'prevArticle' => $prevArticle,
+            'nextArticle' => $nextArticle
         ]);
     }
 
@@ -41,13 +62,22 @@ class FrontController extends Controller
             header('Location: index.php?route=article&articleId=' . $articleId);
             exit();
         }
+        $page = 1;
+        $limit = 10;
         $article = $this->articleDAO->getArticle($articleId);
-        $comments = $this->commentDAO->getCommentsFromArticleId($articleId);
+        $comments = $this->commentDAO->getCommentsFromArticleId($articleId, $page, $limit);
+        $count = $this->commentDAO->countCommentsFromArticle($articleId);
+        $pageCount = (int)ceil($count / $limit);
+        $pageLink = 'index.php?route=article&articleId=' . $article->getId();
         return $this->view->render('article', [
             'post' => $post,
             'errors' => $errors,
             'article' => $article,
-            'comments' => $comments
+            'comments' => $comments,
+            'page' => $page,
+            'count' => $count,
+            'pageCount' => $pageCount,
+            'pageLink' => $pageLink
         ]);
     }
 
@@ -155,5 +185,10 @@ class FrontController extends Controller
             exit();
         }
         return $this->view->render('lost_password');
+    }
+
+    public function privacyPolicy()
+    {
+        return $this->view->render('privacy_policy');
     }
 }

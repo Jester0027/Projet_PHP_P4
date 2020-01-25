@@ -4,6 +4,7 @@ namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
+use BlogApp\src\helpers\Pagination;
 use BlogApp\src\model\Comment;
 
 class CommentDAO extends DAO
@@ -18,9 +19,25 @@ class CommentDAO extends DAO
         return $comment;
     }
 
-    public function getCommentsFromArticleId($articleId)
+    public function countCommentsFromArticle($articleId)
     {
-        $sql = 'SELECT comment.id, user.username, comment.content, comment.is_reported, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE article_id = ? AND comment.is_reported IN(?, ?) ORDER BY comment.created_at DESC';
+        $sql = 'SELECT COUNT(id) FROM comment WHERE article_id = ? AND is_reported IN(0, 2)';
+        $count = $this->createQuery($sql, [$articleId])->fetchColumn();
+        return $count;
+    }
+
+    public function countReportedComments()
+    {
+        $sql = 'SELECT COUNT(id) FROM comment WHERE is_reported = 1';
+        $count = $this->createQuery($sql)->fetchColumn();
+        return $count;
+    }
+
+    public function getCommentsFromArticleId($articleId, $page = 1, $limit = null)
+    {
+        $count = $this->countCommentsFromArticle($articleId);
+        $pagination = Pagination::createPagination($page, $limit, $count);
+        $sql = 'SELECT comment.id, user.username, comment.content, comment.is_reported, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE article_id = ? AND comment.is_reported IN(?, ?) ORDER BY comment.created_at DESC ' . $pagination;
         $result = $this->createQuery($sql, [$articleId, 0, 2]);
         $comments = [];
         foreach ($result as $row) {
@@ -42,9 +59,15 @@ class CommentDAO extends DAO
         ]);
     }
 
-    public function getReportedComments()
+    public function getReportedComments($page, $limit = null)
     {
-        $sql = 'SELECT comment.id, user.username, comment.content, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.is_reported = ?';
+        $pagination = '';
+        if($limit) {
+            $count = $this->countReportedComments();
+            $pagination = Pagination::createPagination($page, $limit, $count);
+        }
+
+        $sql = 'SELECT comment.id, user.username, comment.content, comment.created_at FROM comment INNER JOIN user ON comment.user_id = user.id WHERE comment.is_reported = ? ' . $pagination;
         $result = $this->createQuery($sql, ['1']);
         $comments = [];
         foreach ($result as $row) {

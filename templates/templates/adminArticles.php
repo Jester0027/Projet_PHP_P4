@@ -14,19 +14,19 @@
     </thead>
     <tbody>
         <?php
-        if($articles) {
+        if ($articles) {
             foreach ($articles as $article) { ?>
-            <tr>
-                <td><?= $article->getId() ?></td>
-                <td><a href="index.php?route=article&articleId=<?= $article->getId() ?>"><?= $article->getTitle() ?></a></td>
-                <td><?= $article->getCreatedAt() ?></td>
-                <td><?= $article->getAuthor() ?></td>
-                <td class="right-align">
-                    <a href="index.php?route=editArticle&articleId=<?= $article->getId() ?>" class="btn waves-effect waves-light green"><i class="material-icons left">edit</i>Modifier</a>
-                    <a href="index.php?route=deleteArticle&articleId=<?= $article->getId() ?>" class="btn waves-effect waves-light red"><i class="material-icons left">delete</i>Supprimer</a>
-                </td>
-            </tr>
-        <?php } 
+                <tr>
+                    <td><?= $article->getId() ?></td>
+                    <td><a href="index.php?route=article&articleId=<?= $article->getId() ?>"><?= $article->getTitle() ?></a></td>
+                    <td><?= $article->getCreatedAt() ?></td>
+                    <td><?= $article->getAuthor() ?></td>
+                    <td class="right-align">
+                        <a href="index.php?route=editArticle&articleId=<?= $article->getId() ?>" class="btn waves-effect waves-light green"><i class="material-icons left">edit</i>Modifier</a>
+                        <a href="index.php?route=deleteArticle&articleId=<?= $article->getId() ?>" class="btn waves-effect waves-light red"><i class="material-icons left">delete</i>Supprimer</a>
+                    </td>
+                </tr>
+            <?php }
         } else { ?>
             <tr>
                 <td colspan="5">

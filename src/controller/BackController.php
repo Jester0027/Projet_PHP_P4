@@ -8,6 +8,8 @@ use BlogApp\src\mailer\Mail;
 
 class BackController extends Controller
 {
+    const PAGINATION_LIMIT = 5;
+
     public function admin()
     {
         if (!$this->isAdmin()) {
@@ -15,7 +17,22 @@ class BackController extends Controller
             header('Location: index.php');
             exit();
         }
-        return $this->view->render('admin', [], ['admin'], ['https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js']);
+        $limit = self::PAGINATION_LIMIT;
+
+        $articlesCount = $this->articleDAO->countArticles();
+        $articlesPageCount = (int)ceil($articlesCount / $limit) ?? 1;
+
+        $usersCount = $this->userDAO->countUsers();
+        $usersPageCount = (int)ceil($usersCount / $limit) ?? 1;
+
+        $commentsCount = $this->commentDAO->countReportedComments();
+        $commentsPageCount = ((int)ceil($commentsCount / $limit)) ?? 1;
+
+        return $this->view->render('admin', [
+            'articlesPageCount' => $articlesPageCount,
+            'usersPageCount' => $usersPageCount,
+            'commentsPageCount' => $commentsPageCount
+        ], ['admin'], ['https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js']);
     }
 
     public function _adminArticles()
@@ -25,9 +42,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $articles = $this->articleDAO->getArticles();
+        $limit = self::PAGINATION_LIMIT;
+        $articles = $this->articleDAO->getArticles($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminArticles', [
-            'articles' => $articles
+            'articles' => $articles,
+            'page' => $this->get->get('page')
         ]);
     }
 
@@ -38,9 +57,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $users = $this->userDAO->getUsers();
+        $limit = self::PAGINATION_LIMIT;
+        $users = $this->userDAO->getUsers($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminUsers', [
-            'users' => $users
+            'users' => $users,
+            'page' => $this->get->get('page')
         ]);
     }
 
@@ -51,9 +72,11 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $reportedComments = $this->commentDAO->getReportedComments();
+        $limit = self::PAGINATION_LIMIT;
+        $reportedComments = $this->commentDAO->getReportedComments($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminReports', [
-            'reportedComments' => $reportedComments
+            'reportedComments' => $reportedComments,
+            'page' => $this->get->get('page')
         ]);
     }
 

@@ -28,7 +28,7 @@ class Router
         try {
             if (isset($route)) {
                 if ($route === 'article') {
-                    $this->frontController->getArticle($this->request->getGet()->get('articleId'));
+                    $this->frontController->getArticle($this->request->getGet()->get('articleId'), $this->request->getGet()->get('commentsPage'));
                 } else if ($route === 'addComment') {
                     $this->frontController->addComment($this->request->getSession(), $this->request->getPost(), $this->request->getGet()->get('articleId'));
                 } else if ($route === 'addArticle') {
@@ -79,11 +79,13 @@ class Router
                     $this->backController->_adminUsers();
                 } else if ($route === '_adminReports') {
                     $this->backController->_adminReportedComments();
+                } else if ($route === 'privacyPolicy') {
+                    $this->frontController->privacyPolicy();
                 } else {
                     $this->errorController->get404();
                 }
             } else {
-                $this->frontController->getHome();
+                $this->frontController->getHome($this->request->getGet()->get('page'));
             }
         } catch (Exception $e) {
             $this->errorController->get500($e);

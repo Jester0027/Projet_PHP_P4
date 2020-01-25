@@ -4,8 +4,8 @@ namespace BlogApp\src\DAO;
 
 use BlogApp\config\Parameter;
 use BlogApp\config\Session;
+use BlogApp\src\helpers\Pagination;
 use BlogApp\src\model\Article;
-use DateTime;
 use Exception;
 
 class ArticleDAO extends DAO
@@ -22,9 +22,22 @@ class ArticleDAO extends DAO
         return $article;
     }
 
-    public function getArticles()
+    public function countArticles()
     {
-        $sql = 'SELECT article.id, article.title, article.content, article.caption, user.username, article.created_at FROM article INNER JOIN user ON article.user_id = user.id ORDER BY article.created_at DESC';
+        $sql = 'SELECT COUNT(id) FROM article';
+        $count = $this->createQuery($sql)->fetchColumn();
+        return $count;
+    }
+
+    public function getArticles($page = 1, int $limit = null)
+    {
+        $pagination = '';
+        if($limit) {
+            $count = $this->countArticles();
+            $pagination = Pagination::createPagination($page, $limit, $count);
+        }
+
+        $sql = 'SELECT article.id, article.title, article.content, article.caption, user.username, article.created_at FROM article INNER JOIN user ON article.user_id = user.id ORDER BY article.created_at DESC ' . $pagination;
         $result = $this->createQuery($sql);
         $articles = [];
         foreach ($result as $row) {
@@ -41,6 +54,39 @@ class ArticleDAO extends DAO
         $article = $result->fetch();
         $result->closeCursor();
         return $this->buildObject($article);
+    }
+
+    public function getIdFromFirstArticle()
+    {
+        $sql = 'SELECT MIN(id) as id FROM article';
+        $result = $this->createQuery($sql);
+        $article = $result->fetch();
+        $result->closeCursor();
+        return $article['id'];
+    }
+
+    public function getPrevArticle($id)
+    {
+        $sql = "SELECT * FROM article WHERE id < :id ORDER BY id DESC LIMIT 0,1";
+        $result = $this->createQuery($sql, ['id' => $id]);
+        $article = $result->fetch();
+        $result->closeCursor();
+        $article = $this->buildObject($article);
+        if($article->getId()) 
+            return $article;
+        return false;
+    }
+
+    public function getNextArticle($id)
+    {
+        $sql = "SELECT * FROM article WHERE id > :id LIMIT 0,1";
+        $result = $this->createQuery($sql, ['id' => $id]);
+        $article = $result->fetch();
+        $result->closeCursor();
+        $article = $this->buildObject($article);
+        if($article->getId()) 
+            return $article;
+        return false;
     }
 
     public function addArticle(Parameter $post, Session $session, $createdAt)

@@ -42,16 +42,31 @@ header {
 
 #header-image>h1 {
     z-index: 2;
+    font-size: 3rem;
     position: absolute;
     color: white;
     text-align: center;
     width: 100%;
-    top: 100px;
+    top: 90px;
     text-shadow: 2px 2px 5px black;
 }
 
-.article-content {
+#header-image>.link {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    top: 210px;
+}
+#header-image>.link>a:hover {
+    transform: translateY(-3px);
+}
+
+.content {
     margin-top: 310px;
+}
+
+.article_switch>div>a {
+    max-width: 250px;
 }
 
 .nav-wrapper>.container {
@@ -103,4 +118,14 @@ h2 {
 
 footer li {
     margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .article_switch>div>a {
+        max-width: 150px;
+    }
+
+    #header-image>h1 {
+        top: -20px;
+    }
 }

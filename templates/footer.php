@@ -1,4 +1,4 @@
-<footer class="page-footer indigo darken-3">
+<footer class="page-footer blue-grey darken-3">
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
@@ -37,10 +37,10 @@
             </div>
         </div>
     </div>
-    <div class="footer-copyright indigo darken-4">
+    <div class="footer-copyright blue-grey darken-4">
         <div class="container">
             © 2019 Jean Forteroche
-            <a href="./" class="right white-text text-lighten-4">Mentions légales</a>
+            <a href="index.php?route=privacyPolicy" class="right white-text text-lighten-4">Mentions légales</a>
         </div>
     </div>
 </footer>

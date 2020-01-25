@@ -2,7 +2,7 @@
 $route = $get->get('route');
 ?>
 <header>
-    <nav class="nav-wrapper indigo">
+    <nav class="nav-wrapper blue-grey darken-3">
         <div class="container">
             <a href="index.php" class="brand-logo center" id="brand-logo"><div id="logo-block"><img id="logo" src="images/LogoMakr_1jlJPy.png" alt="logo Jean Forteroche"></div></a>
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>

@@ -36,7 +36,7 @@ class Mail extends Mailer implements IMail
         return $this->sendEmail($from, $to, $subject, $content, self::NAME);
     }
 
-    public function sendEmailChange(parameter $post, $params, User $user)
+    public function sendEmailChange(Parameter $post, $params, User $user)
     {
         $from = self::ADDRESS;
         $to = $post->get('newEmail');
