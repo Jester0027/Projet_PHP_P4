@@ -35,14 +35,16 @@ class FrontController extends Controller
         $pageCount = (int)ceil($count / $limit);
         $pageLink = 'index.php?route=article&articleId=' . $article->getId();
         $prevArticle = $this->articleDAO->getPrevArticle($articleId);
-        $nextArticle = $this->articleDAO->getPrevArticle($articleId);
+        $nextArticle = $this->articleDAO->getNextArticle($articleId);
         return $this->view->render('article', [
             'article' => $article,
             'comments' => $comments,
             'page' => $page,
             'count' => $count,
             'pageCount' => $pageCount,
-            'pageLink' => $pageLink
+            'pageLink' => $pageLink,
+            'prevArticle' => $prevArticle,
+            'nextArticle' => $nextArticle
         ]);
     }
 

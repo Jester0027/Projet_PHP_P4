@@ -11,6 +11,19 @@
 </div>
 
 <div class="content">
+    <div class="row article_switch">
+        <?php if($prevArticle) : ?>
+        <div class="left">
+            <a class="btn blue-grey lighten-1" href="index.php?route=article&articleId=<?= $prevArticle->getId() ?>"><i class="material-icons left">chevron_left</i><span class="truncate"><?= htmlspecialchars($prevArticle->getTitle()) ?></span></a>
+        </div>
+        <?php endif ?>
+        <?php if($nextArticle) : ?>
+        <div class="right">
+            <a class="btn blue-grey lighten-1" href="index.php?route=article&articleId=<?= $nextArticle->getId() ?>"><i class="material-icons right">chevron_right</i><span class="truncate"><?= htmlspecialchars($nextArticle->getTitle()) ?></span></a>
+        </div>
+        <?php endif ?>
+    </div>
+
     <div class="row">
         <div class="row">
             <div class="col s12">
@@ -21,6 +34,19 @@
             <p>Par : <?= htmlspecialchars($article->getAuthor()); ?></p>
             <p>Le : <?= htmlspecialchars($article->getCreatedAt()); ?></p>
         </div>
+    </div>
+
+    <div class="row article_switch">
+        <?php if($prevArticle) : ?>
+        <div class="left">
+            <a class="btn blue-grey lighten-1" href="index.php?route=article&articleId=<?= $prevArticle->getId() ?>"><i class="material-icons left">chevron_left</i><span class="truncate"><?= htmlspecialchars($prevArticle->getTitle()) ?></span></a>
+        </div>
+        <?php endif ?>
+        <?php if($nextArticle) : ?>
+        <div class="right">
+            <a class="btn blue-grey lighten-1" href="index.php?route=article&articleId=<?= $nextArticle->getId() ?>"><i class="material-icons right">chevron_right</i><span class="truncate"><?= htmlspecialchars($nextArticle->getTitle()) ?></span></a>
+        </div>
+        <?php endif ?>
     </div>
 
     <div class="row">

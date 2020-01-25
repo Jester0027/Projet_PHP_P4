@@ -65,6 +65,10 @@ header {
     margin-top: 310px;
 }
 
+.article_switch>div>a {
+    max-width: 250px;
+}
+
 .nav-wrapper>.container {
     height: inherit;
 }
@@ -114,4 +118,14 @@ h2 {
 
 footer li {
     margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .article_switch>div>a {
+        max-width: 150px;
+    }
+
+    #header-image>h1 {
+        top: -20px;
+    }
 }
