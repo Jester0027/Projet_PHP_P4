@@ -79,6 +79,8 @@ class Router
                     $this->backController->_adminUsers();
                 } else if ($route === '_adminReports') {
                     $this->backController->_adminReportedComments();
+                } else if ($route === 'privacyPolicy') {
+                    $this->frontController->privacyPolicy();
                 } else {
                     $this->errorController->get404();
                 }

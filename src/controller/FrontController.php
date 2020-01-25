@@ -6,7 +6,6 @@ use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\mailer\Mail;
 use BlogApp\src\model\User;
-use Exception;
 
 class FrontController extends Controller
 {
@@ -17,10 +16,12 @@ class FrontController extends Controller
         $articles = $this->articleDAO->getArticles($page, $limit);
         $count = $this->articleDAO->countArticles();
         $count = (int)ceil($count / $limit);
+        $firstArticleId = $this->articleDAO->getIdFromFirstArticle();
         return $this->view->render('home', [
             'articles' => $articles,
             'page' => $page,
-            'count' => $count
+            'count' => $count,
+            'firstId' => $firstArticleId
         ]);
     }
 
@@ -33,6 +34,8 @@ class FrontController extends Controller
         $count = $this->commentDAO->countCommentsFromArticle($articleId);
         $pageCount = (int)ceil($count / $limit);
         $pageLink = 'index.php?route=article&articleId=' . $article->getId();
+        $prevArticle = $this->articleDAO->getPrevArticle($articleId);
+        $nextArticle = $this->articleDAO->getPrevArticle($articleId);
         return $this->view->render('article', [
             'article' => $article,
             'comments' => $comments,
@@ -180,5 +183,10 @@ class FrontController extends Controller
             exit();
         }
         return $this->view->render('lost_password');
+    }
+
+    public function privacyPolicy()
+    {
+        return $this->view->render('privacy_policy');
     }
 }
