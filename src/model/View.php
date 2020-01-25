@@ -55,8 +55,6 @@ class View
             require $file;
             return ob_get_clean();
         }
-        var_dump($file);
-        return;
         header('Location: index.php?route=notFound');
     }
 }
