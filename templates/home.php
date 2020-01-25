@@ -15,13 +15,14 @@
     <div id="cover"></div>
     <img src="images/Alaska-background.png" alt="Montagnes d'Alaska">
     <h1 class="header-title">Billet simple pour l'Alaska</h1>
+    <a href="index.php?route=article&articleId=<?= $firstId ?>">Retrouvez mon premier article</a>
 </div>
 
 <div class="content">
     <div class="row">
         <?php foreach ($articles as $article) : ?>
             <a href="./index.php?route=article&articleId=<?= $article->getId(); ?>">
-                <div class="card indigo lighten-1 white-text z-depth-3">
+                <div class="card blue-grey white-text z-depth-3">
                     <div class="card-content">
                         <strong class="card-title"><?= htmlspecialchars($article->getTitle()); ?></strong>
                         <p><?= $article->getCaption(); ?></p>
