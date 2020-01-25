@@ -8,6 +8,8 @@ use BlogApp\src\mailer\Mail;
 
 class BackController extends Controller
 {
+    const PAGINATION_LIMIT = 5;
+
     public function admin()
     {
         if (!$this->isAdmin()) {
@@ -15,7 +17,7 @@ class BackController extends Controller
             header('Location: index.php');
             exit();
         }
-        $limit = 10;
+        $limit = self::PAGINATION_LIMIT;
 
         $articlesCount = $this->articleDAO->countArticles();
         $articlesPageCount = (int)ceil($articlesCount / $limit) ?? 1;
@@ -40,7 +42,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 10;
+        $limit = self::PAGINATION_LIMIT;
         $articles = $this->articleDAO->getArticles($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminArticles', [
             'articles' => $articles,
@@ -55,7 +57,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 10;
+        $limit = self::PAGINATION_LIMIT;
         $users = $this->userDAO->getUsers($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminUsers', [
             'users' => $users,
@@ -70,7 +72,7 @@ class BackController extends Controller
             header("http/1.0 403 forbidden");
             exit();
         }
-        $limit = 10;
+        $limit = self::PAGINATION_LIMIT;
         $reportedComments = $this->commentDAO->getReportedComments($this->get->get('page'), $limit);
         return $this->view->renderTemplate('adminReports', [
             'reportedComments' => $reportedComments,
