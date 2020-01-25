@@ -6,7 +6,6 @@ use BlogApp\config\Parameter;
 use BlogApp\config\Session;
 use BlogApp\src\helpers\Pagination;
 use BlogApp\src\model\Comment;
-use Exception;
 
 class CommentDAO extends DAO
 {
@@ -22,7 +21,7 @@ class CommentDAO extends DAO
 
     public function countCommentsFromArticle($articleId)
     {
-        $sql = 'SELECT COUNT(id) FROM comment WHERE article_id = ?';
+        $sql = 'SELECT COUNT(id) FROM comment WHERE article_id = ? AND is_reported IN(0, 2)';
         $count = $this->createQuery($sql, [$articleId])->fetchColumn();
         return $count;
     }
