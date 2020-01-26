@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /index.php?route=admin
+Disallow: /index.php?route=profile
