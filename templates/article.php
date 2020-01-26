@@ -1,4 +1,7 @@
-<?php $this->title = htmlspecialchars($article->getTitle()); ?>
+<?php 
+$this->title = htmlspecialchars($article->getTitle()); 
+$this->description = "Billet simple pour l'Alaska - " . htmlspecialchars($article->getCaption());
+?>
 
 <div id="session" hidden>
     <?= $this->session->show('comment') ?>

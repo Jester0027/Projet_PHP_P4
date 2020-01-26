@@ -8,6 +8,7 @@ class View
 {
     private $file;
     private $title;
+    private $description;
     private $request;
     private $session;
     private $get;
@@ -17,6 +18,7 @@ class View
         $this->request = new Request();
         $this->session = $this->request->getSession();
         $this->get = $this->request->getGet();
+        $this->description = "Blog officiel de Jean Forteroche";
     }
     
     public function render($template, $data = [], $scriptFiles = [], $cdn = [])
@@ -30,6 +32,7 @@ class View
         $footer = $this->renderFile('../templates/footer.php', []);
         $view = $this->renderFile('../templates/base.php', [
             'title' => $this->title,
+            'description' => $this->description,
             'header' => $header,
             'content' => $content,
             'footer' => $footer,
