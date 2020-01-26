@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="<?= $description ?>">
+    <link rel="icon" href="images/mountain-logo.png" type="image/png">
     <title>Jean Forteroche - <?= $title ?></title>
 
     <script src="https://cdn.tiny.cloud/1/7oil4153ta5v1d7qubez5x7rha8a4qm6gjy18orgior3k9m0/tinymce/5/tinymce.min.js"></script>
