@@ -141,13 +141,20 @@ class UserDAO extends DAO
 
     public function checkTokenAndEmail($token, $email)
     {
+        $sql = 'SELECT token FROM user WHERE token = ? AND email = ?';
+        $result = $this->createQuery($sql, [
+            $token,
+            $email
+        ]);
+        $token = var_dump($result->fetchColumn());
+        $nullToken = $token === 'NULL' || $token === "" || empty($token);
         $sql = 'SELECT COUNT(id) FROM user WHERE token = ? AND email = ?';
         $result = $this->createQuery($sql, [
             $token,
             $email
         ]);
         $validTokenAndEmail = $result->fetchColumn();
-        if (!$validTokenAndEmail) {
+        if (!$validTokenAndEmail || $nullToken) {
             return false;
         } else {
             return true;
