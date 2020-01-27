@@ -146,7 +146,7 @@ class UserDAO extends DAO
             $token,
             $email
         ]);
-        $token = var_dump($result->fetchColumn());
+        $token = $result->fetchColumn();
         $nullToken = $token === 'NULL' || $token === "" || empty($token);
         $sql = 'SELECT COUNT(id) FROM user WHERE token = ? AND email = ?';
         $result = $this->createQuery($sql, [
